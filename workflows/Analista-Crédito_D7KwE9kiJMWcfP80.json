@@ -1,1 +1,149 @@
-{"createdAt":"2025-06-05T15:05:04.706Z","updatedAt":"2025-06-06T18:34:20.131Z","id":"D7KwE9kiJMWcfP80","name":"Analista-Crédito","active":false,"isArchived":false,"nodes":[{"parameters":{"options":{"allowFileUploads":true}},"type":"@n8n/n8n-nodes-langchain.chatTrigger","typeVersion":1.1,"position":[0,0],"id":"e53107ae-0d94-4107-8ef4-dc8b221c667b","name":"When chat message received","webhookId":"f79a0c29-418a-4a65-b53f-209821a13816"},{"parameters":{"options":{"systemMessage":"=##Persona\nVocê é um assistente virtual focado na analise documental para crédito. \n\n##Tarefa\nAnalisar dados de uma empresa e gerar um relatório apontando os principais pontos.\n\nListe pontos fortes e fracos da situação da empresa, além de verificar o melhor cenário possível incluindo melhor linha de crédito e melhores bancos para relacionamento.\n\nBaseado nessas intruções, elabore o relatorio de uma empresa com esses dados: {{ $json.chatInput }}\n\nSempre comece o relatório com esse formato: Relatório de Análise Documental da [nome da empresa]"}},"type":"@n8n/n8n-nodes-langchain.agent","typeVersion":2,"position":[220,0],"id":"dc48f867-0aeb-41c0-965c-ba8ae1e103ad","name":"AI Agent"},{"parameters":{"model":{"__rl":true,"value":"gpt-4o-mini","mode":"list","cachedResultName":"gpt-4o-mini"},"options":{"responseFormat":"text"}},"type":"@n8n/n8n-nodes-langchain.lmChatOpenAi","typeVersion":1.2,"position":[220,180],"id":"16032f2a-16f4-4885-891c-5bdc79d4845d","name":"OpenAI Chat Model","credentials":{"openAiApi":{"id":"tt7ZuQiKAHQoVWEc","name":"API IA PESSOAS"}}},{"parameters":{"jsCode":"const texto = $input.first().json.output;\n\n// Expressão regular corrigida para capturar após \"da\", considerando possível presença de \"**\"\nconst match = texto.match(/Relatório de Análise Documental da\\s+([^\\n\\*]+)/i);\n\n// Limpeza do nome\nconst nomeEmpresa = match ? match[1].trim() : 'Empresa Desconhecida';\n\nreturn [\n  {\n    json: {\n      output: texto,\n      nomeEmpresa\n    }\n  }\n];\n"},"type":"n8n-nodes-base.code","typeVersion":2,"position":[580,0],"id":"c8e45d1c-cc16-4cbf-9df4-b000844ebbde","name":"Code"},{"parameters":{"tableId":"Registros","fieldsUi":{"fieldValues":[{"fieldId":"Relatorio","fieldValue":"={{ $json.output }}"},{"fieldId":"Nome da Empresa","fieldValue":"={{ $json.nomeEmpresa }}"},{"fieldId":"input","fieldValue":"={{ $('When chat message received').item.json.chatInput }}"}]}},"type":"n8n-nodes-base.supabase","typeVersion":1,"position":[780,0],"id":"0a0df81b-b903-4b09-8bb0-fc5f3d2ff779","name":"Supabase1","credentials":{"supabaseApi":{"id":"3JjufIVJZHwfvsHw","name":"Supabase account"}}}],"connections":{"When chat message received":{"main":[[{"node":"AI Agent","type":"main","index":0}]]},"OpenAI Chat Model":{"ai_languageModel":[[{"node":"AI Agent","type":"ai_languageModel","index":0}]]},"AI Agent":{"main":[[{"node":"Code","type":"main","index":0}]]},"Code":{"main":[[{"node":"Supabase1","type":"main","index":0}]]}},"settings":{"executionOrder":"v1"},"staticData":null,"meta":{"templateCredsSetupCompleted":true},"pinData":{},"versionId":"92098700-4edf-4278-8d6a-452255f08a1c","triggerCount":0,"shared":[{"createdAt":"2025-06-05T15:05:04.706Z","updatedAt":"2025-06-05T15:05:04.706Z","role":"workflow:owner","workflowId":"D7KwE9kiJMWcfP80","projectId":"g8BnYlos8HJUUVcr","project":{"createdAt":"2025-05-28T13:28:04.746Z","updatedAt":"2025-05-28T13:31:33.202Z","id":"g8BnYlos8HJUUVcr","name":"IA Pessoas <comercial@castelobrancocontabilidade.com.br>","type":"personal","icon":null,"description":null,"projectRelations":[{"createdAt":"2025-05-28T13:28:04.746Z","updatedAt":"2025-05-28T13:28:04.746Z","userId":"17ee4480-754a-4392-9fc2-a6bc3c46ebad","projectId":"g8BnYlos8HJUUVcr","user":{"createdAt":"2025-05-28T13:28:03.022Z","updatedAt":"2025-10-08T03:00:53.489Z","id":"17ee4480-754a-4392-9fc2-a6bc3c46ebad","email":"comercial@castelobrancocontabilidade.com.br","firstName":"IA","lastName":"Pessoas","personalizationAnswers":{"version":"v4","personalization_survey_submitted_at":"2025-05-28T13:31:41.717Z","personalization_survey_n8n_version":"1.94.1"},"settings":{"userActivated":true,"easyAIWorkflowOnboarded":true,"firstSuccessfulWorkflowId":"fN5uSWvKRujKur6R","userActivatedAt":1757621781409,"npsSurvey":{"responded":true,"lastShownAt":1749478378830},"dismissedCallouts":{"preBuiltAgentsCalloutHttpRequest":true,"preBuiltAgentsCalloutGoogleDrive":true,"preBuiltAgentsModalCallout":true,"preBuiltAgentsCallout":true}},"disabled":false,"mfaEnabled":false,"lastActiveAt":"2025-10-08","isPending":false}}]}}],"tags":[{"createdAt":"2025-06-05T19:11:44.213Z","updatedAt":"2025-06-05T19:11:44.213Z","id":"IQCna85tB5BpphGY","name":"Bernardo"},{"createdAt":"2025-06-05T19:11:47.772Z","updatedAt":"2025-06-05T19:11:47.772Z","id":"QxWPCrzStxcHudYm","name":"Johan"},{"createdAt":"2025-06-05T19:11:54.783Z","updatedAt":"2025-06-05T19:11:54.783Z","id":"YJfcK5uJ8K8eGTw1","name":"Jornada Bancária"}]}
+{
+  "createdAt": "2025-06-05T15:05:04.706Z",
+  "id": "D7KwE9kiJMWcfP80",
+  "name": "Analista-Crédito",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "allowFileUploads": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e53107ae-0d94-4107-8ef4-dc8b221c667b",
+      "name": "When chat message received",
+      "webhookId": "f79a0c29-418a-4a65-b53f-209821a13816"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=##Persona\nVocê é um assistente virtual focado na analise documental para crédito. \n\n##Tarefa\nAnalisar dados de uma empresa e gerar um relatório apontando os principais pontos.\n\nListe pontos fortes e fracos da situação da empresa, além de verificar o melhor cenário possível incluindo melhor linha de crédito e melhores bancos para relacionamento.\n\nBaseado nessas intruções, elabore o relatorio de uma empresa com esses dados: {{ $json.chatInput }}\n\nSempre comece o relatório com esse formato: Relatório de Análise Documental da [nome da empresa]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "dc48f867-0aeb-41c0-965c-ba8ae1e103ad",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {
+          "responseFormat": "text"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        180
+      ],
+      "id": "16032f2a-16f4-4885-891c-5bdc79d4845d",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "jsCode": "const texto = $input.first().json.output;\n\n// Expressão regular corrigida para capturar após \"da\", considerando possível presença de \"**\"\nconst match = texto.match(/Relatório de Análise Documental da\\s+([^\\n\\*]+)/i);\n\n// Limpeza do nome\nconst nomeEmpresa = match ? match[1].trim() : 'Empresa Desconhecida';\n\nreturn [\n  {\n    json: {\n      output: texto,\n      nomeEmpresa\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        580,
+        0
+      ],
+      "id": "c8e45d1c-cc16-4cbf-9df4-b000844ebbde",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "tableId": "Registros",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "Relatorio",
+              "fieldValue": "={{ $json.output }}"
+            },
+            {
+              "fieldId": "Nome da Empresa",
+              "fieldValue": "={{ $json.nomeEmpresa }}"
+            },
+            {
+              "fieldId": "input",
+              "fieldValue": "={{ $('When chat message received').item.json.chatInput }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        780,
+        0
+      ],
+      "id": "0a0df81b-b903-4b09-8bb0-fc5f3d2ff779",
+      "name": "Supabase1"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
