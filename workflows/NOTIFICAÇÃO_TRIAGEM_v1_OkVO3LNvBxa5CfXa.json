@@ -90,14 +90,14 @@
           "value": "1412776659505119316",
           "mode": "list",
           "cachedResultName": "Desenvolvimento - Dep IA",
-          "cachedResultUrl": "[REDACTED]"
+          "cachedResultUrl": "https://discord.com/channels/1412776659505119316"
         },
         "channelId": {
           "__rl": true,
           "value": "1417832389589209170",
           "mode": "list",
           "cachedResultName": "teste-bot",
-          "cachedResultUrl": "[REDACTED]"
+          "cachedResultUrl": "https://discord.com/channels/1412776659505119316/1417832389589209170"
         },
         "content": "={{ $json.content }}",
         "options": {
@@ -115,7 +115,13 @@
       ],
       "id": "3d18e7e0-6148-4b46-8b68-f1e3d3691ca8",
       "name": "Envia a mensagem",
-      "webhookId": "16ae9620-96c4-4fe7-ade8-5acceb47e0e9"
+      "webhookId": "16ae9620-96c4-4fe7-ade8-5acceb47e0e9",
+      "credentials": {
+        "discordBotApi": {
+          "id": "b3RHY2Z9JAZTOY8E",
+          "name": "Discord Bot - Notificação Triagem"
+        }
+      }
     },
     {
       "parameters": {},
@@ -199,10 +205,10 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "[REDACTED]",
+          "value": "1160RATC80bli13YPXIKNn2ERPlKaWajFgcqnotbFB5A",
           "mode": "list",
           "cachedResultName": "[TESTE - TRIAGEM]",
-          "cachedResultUrl": "[REDACTED]"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1160RATC80bli13YPXIKNn2ERPlKaWajFgcqnotbFB5A/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
@@ -220,6 +226,12 @@
       "id": "e7d52b71-ffe1-49ae-8844-9d32ba7772a2",
       "name": "Lê planilha",
       "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ikCsPDocQe5HfNYt",
+          "name": "API GOOGLE - IAPESSOAS"
+        }
+      },
       "notes": "Lê todas as linhas da planilha"
     },
     {
