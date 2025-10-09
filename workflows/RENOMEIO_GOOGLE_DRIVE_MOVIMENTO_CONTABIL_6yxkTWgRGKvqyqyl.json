@@ -189,17 +189,17 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "[REDACTED]",
+          "value": "1fvoZsrFIUSPYah3jmH4N-aotcEOyYtFkSm8RYkW8nFQ",
           "mode": "list",
           "cachedResultName": "Arquivos",
-          "cachedResultUrl": "[REDACTED]"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fvoZsrFIUSPYah3jmH4N-aotcEOyYtFkSm8RYkW8nFQ/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Página1",
-          "cachedResultUrl": "[REDACTED]"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fvoZsrFIUSPYah3jmH4N-aotcEOyYtFkSm8RYkW8nFQ/edit#gid=0"
         },
         "options": {}
       },
@@ -211,6 +211,12 @@
       ],
       "id": "a4af93c4-8d16-4fe3-8ee4-20a03fe76e29",
       "name": "CONSULTAR IDS NA PLANILHA",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ikCsPDocQe5HfNYt",
+          "name": "API GOOGLE - IAPESSOAS"
+        }
+      },
       "disabled": true
     },
     {
@@ -350,17 +356,17 @@
         "operation": "appendOrUpdate",
         "documentId": {
           "__rl": true,
-          "value": "[REDACTED]",
+          "value": "1fvoZsrFIUSPYah3jmH4N-aotcEOyYtFkSm8RYkW8nFQ",
           "mode": "list",
           "cachedResultName": "Arquivos",
-          "cachedResultUrl": "[REDACTED]"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fvoZsrFIUSPYah3jmH4N-aotcEOyYtFkSm8RYkW8nFQ/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Página1",
-          "cachedResultUrl": "[REDACTED]"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fvoZsrFIUSPYah3jmH4N-aotcEOyYtFkSm8RYkW8nFQ/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -405,12 +411,19 @@
       ],
       "id": "365e754a-d39d-41df-ae0b-3fd8a0e67080",
       "name": "ATUALIZAR PLANILHA1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ikCsPDocQe5HfNYt",
+          "name": "API GOOGLE - IAPESSOAS"
+        }
+      },
       "disabled": true
     },
     {
       "parameters": {
         "url": "=https://www.googleapis.com/drive/v3/files/{{$json.ID}}?alt=media&supportsAllDrives=true",
-        "authentication": "[REDACTED]",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -421,12 +434,19 @@
       ],
       "id": "8e631e7a-cfa8-424d-9598-0a304c2185e9",
       "name": "BAIXA PDFS INCORRETOS2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rzP1eQCZan8TdHlL",
+          "name": "API IA PESSOAS"
+        }
+      },
       "disabled": true
     },
     {
       "parameters": {
         "url": "=https://www.googleapis.com/drive/v3/files/{{$json.ID}}?alt=media&supportsAllDrives=true",
-        "authentication": "[REDACTED]",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
         "options": {
           "response": {
             "response": {
@@ -443,7 +463,13 @@
       ],
       "id": "fd581e4c-6136-476a-a490-a3dea1c540fe",
       "name": "BAIXA ARQUIVOS",
-      "retryOnFail": false
+      "retryOnFail": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rzP1eQCZan8TdHlL",
+          "name": "API IA PESSOAS"
+        }
+      }
     },
     {
       "parameters": {
@@ -531,6 +557,12 @@
       ],
       "id": "32b897ab-c460-4545-bf37-d9fc94576389",
       "name": "RENOMEAR PDF INCORRETO",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rzP1eQCZan8TdHlL",
+          "name": "API IA PESSOAS"
+        }
+      },
       "disabled": true
     },
     {
@@ -694,7 +726,7 @@
           "__rl": true,
           "value": "Wc7jGiKMw11GOwwj",
           "mode": "list",
-          "cachedResultUrl": "[REDACTED]",
+          "cachedResultUrl": "/workflow/Wc7jGiKMw11GOwwj",
           "cachedResultName": "RENOMEIA PDFS"
         },
         "workflowInputs": {
@@ -958,7 +990,13 @@
         1920
       ],
       "id": "36deaf69-87c7-4398-9dd5-1202d5f8d3db",
-      "name": "Search files and folders1"
+      "name": "Search files and folders1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rzP1eQCZan8TdHlL",
+          "name": "API IA PESSOAS"
+        }
+      }
     },
     {
       "parameters": {
@@ -980,7 +1018,13 @@
         1936
       ],
       "id": "819ff63f-aefd-41a8-ad7b-548db4d5c11f",
-      "name": "PROCURAR NOME \"MOVIMENTO\""
+      "name": "PROCURAR NOME \"MOVIMENTO\"",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "NSZ4PVYUVpW9BRa9",
+          "name": "Google Drive API Triagem"
+        }
+      }
     },
     {
       "parameters": {
@@ -1002,7 +1046,13 @@
         1936
       ],
       "id": "313d8b32-8fbc-45f9-9fa4-1d2f682c0abf",
-      "name": "VARREDURA NAS PASTAS DE MOVIMENTO"
+      "name": "VARREDURA NAS PASTAS DE MOVIMENTO",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "NSZ4PVYUVpW9BRa9",
+          "name": "Google Drive API Triagem"
+        }
+      }
     },
     {
       "parameters": {
@@ -1057,7 +1107,13 @@
         2096
       ],
       "id": "b495e452-74fe-41fa-889d-39557e30e891",
-      "name": "Search files and folders"
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rzP1eQCZan8TdHlL",
+          "name": "API IA PESSOAS"
+        }
+      }
     },
     {
       "parameters": {
@@ -1080,6 +1136,12 @@
       ],
       "id": "1946baa9-023a-4dfa-99b1-0a1b842814e0",
       "name": "Search files and folders2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rzP1eQCZan8TdHlL",
+          "name": "API IA PESSOAS"
+        }
+      },
       "disabled": true
     },
     {
@@ -1107,12 +1169,19 @@
         2144
       ],
       "id": "a15caec8-9a31-4ade-90db-f6f0e63a2d2d",
-      "name": "PROCURAR NOME \"MOVIMENTO\"1"
+      "name": "PROCURAR NOME \"MOVIMENTO\"1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "NSZ4PVYUVpW9BRa9",
+          "name": "Google Drive API Triagem"
+        }
+      }
     },
     {
       "parameters": {
         "url": "=https://www.googleapis.com/drive/v3/files/{{$json.id}}?alt=media&supportsAllDrives=true",
-        "authentication": "[REDACTED]",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
         "options": {
           "response": {
             "response": {
@@ -1130,8 +1199,14 @@
       "id": "a5dd5bf6-800d-4bfd-b7df-ce2869d34114",
       "name": "HTTP Request",
       "retryOnFail": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "NSZ4PVYUVpW9BRa9",
+          "name": "Google Drive API Triagem"
+        }
+      },
       "disabled": true,
-      "onError": "[REDACTED]"
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
