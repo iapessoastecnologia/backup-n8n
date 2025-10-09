@@ -302,8 +302,7 @@
     {
       "parameters": {
         "url": "=https://www.googleapis.com/drive/v3/files/{{$json.ID}}?alt=media&supportsAllDrives=true",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleDriveOAuth2Api",
+        "authentication": "[REDACTED]",
         "options": {
           "response": {
             "response": {
@@ -320,13 +319,7 @@
       ],
       "id": "c7dc852c-b7d6-41c4-9a3a-1de7aae1f91b",
       "name": "BAIXA ARQUIVOS",
-      "retryOnFail": false,
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "NSZ4PVYUVpW9BRa9",
-          "name": "Google Drive API Triagem"
-        }
-      }
+      "retryOnFail": false
     },
     {
       "parameters": {
@@ -392,7 +385,7 @@
           "__rl": true,
           "value": "uTiS3qSlbvXUlCnx",
           "mode": "list",
-          "cachedResultUrl": "/workflow/uTiS3qSlbvXUlCnx",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "RENOMEIO PDF INCORRETO"
         },
         "workflowInputs": {
@@ -445,7 +438,7 @@
           "__rl": true,
           "value": "fN5uSWvKRujKur6R",
           "mode": "list",
-          "cachedResultUrl": "/workflow/fN5uSWvKRujKur6R",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "RENOMEIO PDFS INCORRETOS(ERRO)"
         },
         "workflowInputs": {
@@ -499,7 +492,7 @@
           "__rl": true,
           "value": "YDH3keRYE4xE3V2m",
           "mode": "list",
-          "cachedResultUrl": "/workflow/YDH3keRYE4xE3V2m",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "RENOMEIA IMAGENS"
         },
         "workflowInputs": {
@@ -551,7 +544,7 @@
           "__rl": true,
           "value": "Wc7jGiKMw11GOwwj",
           "mode": "list",
-          "cachedResultUrl": "/workflow/Wc7jGiKMw11GOwwj",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "RENOMEIA PDFS"
         },
         "workflowInputs": {
@@ -735,13 +728,7 @@
         1984
       ],
       "id": "ddeb8f28-5e67-4cf2-ba34-68c6181a4332",
-      "name": "PROCURAR NOME \"MOVIMENTO\"",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "NSZ4PVYUVpW9BRa9",
-          "name": "Google Drive API Triagem"
-        }
-      }
+      "name": "PROCURAR NOME \"MOVIMENTO\""
     },
     {
       "parameters": {
@@ -763,13 +750,7 @@
         1984
       ],
       "id": "78eafef3-c6f6-49b6-94a7-6cf3106efa5c",
-      "name": "VARREDURA NAS PASTAS DE MOVIMENTO",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "NSZ4PVYUVpW9BRa9",
-          "name": "Google Drive API Triagem"
-        }
-      }
+      "name": "VARREDURA NAS PASTAS DE MOVIMENTO"
     },
     {
       "parameters": {
@@ -824,13 +805,7 @@
         2128
       ],
       "id": "b5c1e84a-589f-407c-83d5-0a6d8160fcab",
-      "name": "Search files and folders",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "NSZ4PVYUVpW9BRa9",
-          "name": "Google Drive API Triagem"
-        }
-      }
+      "name": "Search files and folders"
     },
     {
       "parameters": {
@@ -852,7 +827,7 @@
           "__rl": true,
           "value": "fknoxGG9U5fLOwI4",
           "mode": "list",
-          "cachedResultUrl": "/workflow/fknoxGG9U5fLOwI4",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "Drive Activity"
         },
         "workflowInputs": {
