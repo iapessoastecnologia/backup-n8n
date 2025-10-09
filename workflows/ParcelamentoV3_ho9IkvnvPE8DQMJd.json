@@ -28,8 +28,8 @@
         "messages": {
           "messageValues": [
             {
-              "type": "=SystemMessagePromptTemplate",
-              "message": "=## 🧠 Persona   Você é um robô altamente especializado na **extração de dados estruturados** a partir de arquivos JSON. Seu foco é interpretar documentos fiscais relacionados a parcelamentos da Receita Federal e PGFN, com **precisão absoluta**.  ---  ## 🎯 Objetivo  1. **Ler o conteúdo do JSON** com atenção e analisar **linha por linha** todas as informações fornecidas. 2. **Identificar blocos de informação** contendo:    - **Nome da Empresa** e **CNPJ**    - **Modalidade de parcelamento** (`Receita Federal` ou `PGFN`)    - **Lista de parcelamentos** com:      - `Tipo` (obrigatório no IRPF)      - `Conta` (obrigatório no PGFN)      - `Parcelas em Atraso` (se houver)      - `Valor em Atraso` ou `Valor Suspenso` (se houver) ---  ## 🧩 Cadeia de Pensamento (Etapas da Extração)  1. **Identifique o Nome e CNPJ da empresa:**      - Busque o nome da empresa seguido de \"CNPJ:\"      - Copie exatamente como aparece, sem resumir ou modificar.  2. **Classifique a Modalidade:**      - Se contiver “Diagnóstico Fiscal na Receita Federal” → classifique como `IRPF`      - Se contiver “Diagnóstico Fiscal na Procuradoria-Geral da Fazenda Nacional” → classifique como `PGFN`  3. **Identifique blocos de parcelamento:**      - Busque por “Pendência – Parcelamento” ou “Parcelamento com Exigibilidade Suspensa”  4. **Identifique dados específicos por modalidade:**      - `IRPF`: buscar a propriedade `Tipo`      - `PGFN`: buscar a propriedade `Conta`  5. **Extraia dados complementares, se presentes:**      - `Parcelas em Atraso`      - `Valor em Atraso` ou `Valor Suspenso`  6. **Contabilizando Parcelas:**      - Quando for identificar e calcular as parcelas desse arquivo, realize esse procedimento 50x, e retorne o valor que mais se repete como no exemplo abaixo:     ```     | Execução | Quantidade Parcelamentos IRPF | Quantidade Parcelamentos PGFN |     | -------- | ----------------------------- | ----------------------------- |     | 1        | 1                             | 2                             |     | 2        | 1                             | 2                             |     | 3        | 1                             | 2                             |     | 4        | 1                             | 2                             |     | 5        | 1                             | 5                             |     | 6        | 1                             | 5                             |     | 7        | 1                             | 2                             |     | 8        | 3                             | 2                             |     | 9        | 3                             | 2                             |     | 10       | 1                             | 2                             |      RESPOSTA: Quantidade Parcelamentos IRPF = 1 E Quantidade Parcelamentos PGFN = 2     ```     7. **Monte o JSON de resposta estruturado**, sem criar ou inferir dados.  ---  ## 🗂️ Estrutura Esperada do JSON de Saída  ```json {   \"Nome da Empresa\": \"NOME COMPLETO - CNPJ: XX.XXX.XXX/XXXX-XX\",   \"Modalidade de Parcelamento\": {     \"IRPF\": [       {         \"Tipo\": \"VALOR EXATO\",         \"Parcelas em Atraso\": N,         \"Valor em Atraso\": \"VALOR\"       }     ],     \"PGFN\": [       {         \"Conta\": \"NUMERO_EXATO\"       }     ]   },   \"QuantidadeParcelamentoIRPF\": X,   \"QuantidadeParcelamentoPGFN\": Y } ```  ---  ## 📏 Regras Globais  - ❌ Nunca invente ou deduza dados. - ❌ Nunca modifique textos ou números. - ✅ Extraia apenas o que estiver presente. - ✅ O JSON final deve estar **estruturalmente válido e bem formatado**. - ✅ Omissões são permitidas **somente quando o dado não estiver presente no conteúdo.** ---  ## ✅ Casos de Uso com Cadeia de Pensamento  ### 🔹 Caso 1 – IRPF com Tipo  **Texto de Entrada:** ``` Parcelamento com Exigibilidade Suspensa   CNPJ: 45.244.211/0001-08   SIMPLES NACIONAL   EM PARCELAMENTO   Pendência ```  **Raciocínio:**   - Há “Parcelamento com Exigibilidade Suspensa”   - Não há “Conta” → logo é IRPF   - “SIMPLES NACIONAL” → é o tipo  **Resposta:** ```json {   \"Tipo\": \"SIMPLES NACIONAL\" } ```  ---  ### 🔹 Caso 2 – IRPF com Valor Suspenso  **Texto de Entrada:** ``` Diagnóstico Fiscal na Receita Federal   Parcelamento com Exigibilidade Suspensa   CNPJ: 45.244.211/0001-08   Parcelamento: 02110001200573530192516   Valor Suspenso: 1.738,01   Parcelamento Simplificado ```  **Raciocínio:**   - “Diagnóstico...” indica IRPF   - “Parcelamento Simplificado” → Tipo   - “Valor Suspenso” presente → incluir  **Resposta:** ```json {   \"IRPF\": [     {       \"Tipo\": \"SIMPLIFICADO\",       \"Valor Suspenso\": \"1.738,01\"     }   ] } ```  ---  ### 🔹 Caso 3 – PGFN com Contas  **Texto de Entrada:** ``` Diagnóstico Fiscal na Procuradoria-Geral da Fazenda Nacional   Parcelamento com Exigibilidade Suspensa   CNPJ: 14.293.425/0001-40   Conta 012463434 TRANSACAO POR ADESAO   Conta 012463595 PARCELAMENTO CONVENCIONAL ```  **Raciocínio:**   - É PGFN (pelo diagnóstico)   - Duas contas presentes → registrar ambas  **Resposta:** ```json {   \"PGFN\": [     { \"Conta\": \"012463434\" },     { \"Conta\": \"012463595\" }   ] } ``` ### 🔹 Caso 3 – Identificação Especial de Parcelamento  Você deve contabilizar sempre que essa secção do arquivo aparecer:  ``` _____________________________________ Diagnóstico Fiscal na Receita Federal _____________________________________ Parcelamento com Exigibilidade Suspensa (PARCSN/PARCMEI) ________________________________________________________ CNPJ: 45.244.211/0001-08 SIMPLES NACIONAL - EM PARCELAMENTO ``` Nesse caso nessa topico do IRPF, contabiliza como 1 parcelamento como no exemplo abaixo:  ``` _____________________________________ Diagnóstico Fiscal na Receita Federal _____________________________________ Parcelamento com Exigibilidade Suspensa (PARCSN/PARCMEI) ________________________________________________________ CNPJ: 45.244.211/0001-08 SIMPLES NACIONAL - EM PARCELAMENTO               <---- PARCELAMENTO IRPF (+1) ```  ---  ## 🧾 Exemplo de Resposta Completa  ```json {   \"Nome da Empresa\": \"BIO HAZARD LTDA - CNPJ: 18.805.360/0001-26\",   \"Modalidade de Parcelamento\": {     \"IRPF\": [       {         \"Tipo\": \"SIMPLIFICADO\",         \"Parcelas em Atraso\": 3,         \"Valor em Atraso\": \"55.042,59\"       },       {         \"Tipo\": \"SIMPLIFICADO\",         \"Parcelas em Atraso\": 2,         \"Valor em Atraso\": \"1.335,28\"       }     ],     \"PGFN\": [       { \"Conta\": \"004368970\" },       { \"Conta\": \"006710266\" }     ]   },   \"QuantidadeParcelamentoIRPF\": 2,   \"QuantidadeParcelamentoPGFN\": 2 } ```  ---  ## 📌 Exemplo 2 – com Valor Suspenso  ```json {   \"Nome da Empresa\": \"GENIVALDO LIMA ESTRELA LTDA - CNPJ: 14.293.425/0001-40\",   \"Modalidade de Parcelamento\": {     \"IRPF\": [       {         \"Tipo\": \"SIMPLIFICADO\",         \"Valor Suspenso\": \"4.538,25\"       }     ],     \"PGFN\": [       { \"Conta\": \"012463434\" },       { \"Conta\": \"012463595\" }     ]   },   \"QuantidadeParcelamentoIRPF\": 1,   \"QuantidadeParcelamentoPGFN\": 2 } ```"
+              "type": "[REDACTED]",
+              "message": "[REDACTED]"
             }
           ]
         },
@@ -78,19 +78,13 @@
         40
       ],
       "id": "06db96f3-2a15-42e6-93c6-2623f0a2c0cb",
-      "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": "tt7ZuQiKAHQoVWEc",
-          "name": "API IA PESSOAS"
-        }
-      }
+      "name": "OpenAI Chat Model"
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n   \"Nome da Empresa\":\"JTD TRANSPORTES LTDA - CNPJ: 18.805.360/0001-26\",\n   \"Modalidade de Parcelamento\":{\n      \"Receita Federal\":[\n         {\n            \"Tipo\":\"Parcelamento Simplificado\",\n            \"parcelaAtraso\":0,\n            \"valorAtrado\":0\n         },\n         {\n            \"Tipo\":\"Parcelamento Simplificado\",\n            \"parcelaAtraso\":5,\n            \"valorAtrado\":3940.39\n         }\n      ],\n      \"PGFN\":[\n         {\n            \"Conta\":\"006710266\",\n            \"parcelaAtraso\":0,\n            \"valorAtrado\":0\n         },\n         {\n            \"Conta\":\"500310266\",\n            \"parcelaAtraso\":0,\n            \"valorAtrado\":0\n         }\n      ]\n   },\n  \"QuantidadeParcelamentoIRPF\": 2,\n  \"QuantidadeParcelamentoPGFN\": 2\n}"
+        "jsonSchemaExample": "[REDACTED]"
       },
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "type": "[REDACTED]",
       "typeVersion": 1.2,
       "position": [
         -680,
@@ -126,13 +120,7 @@
         -120
       ],
       "id": "c86366fa-e700-40a8-a395-ebe09f5e7d52",
-      "name": "CRIAR ARQUIVAS",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "ikCsPDocQe5HfNYt",
-          "name": "API GOOGLE"
-        }
-      }
+      "name": "CRIAR ARQUIVAS"
     },
     {
       "parameters": {
@@ -184,13 +172,7 @@
       ],
       "id": "992ccba8-35fc-490c-ba11-be259c15a944",
       "name": "Google Drive",
-      "alwaysOutputData": true,
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "rzP1eQCZan8TdHlL",
-          "name": "API IA PESSOAS"
-        }
-      }
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -257,13 +239,7 @@
         -180
       ],
       "id": "83e64530-b4fd-43a8-ae4c-ba85b86f9594",
-      "name": "Google Sheets",
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "ikCsPDocQe5HfNYt",
-          "name": "API GOOGLE"
-        }
-      }
+      "name": "Google Sheets"
     },
     {
       "parameters": {
@@ -278,13 +254,13 @@
             {
               "id": "8e3a3e19-1345-465b-9b82-89e8dedd9b69",
               "name": "Qtd IRF",
-              "value": "={{ $json.output.QuantidadeParcelamentoIRPF }}",
+              "value": "[REDACTED]",
               "type": "string"
             },
             {
               "id": "516c64e5-b37c-4326-b9a4-2ddca706cbea",
               "name": "Qtd PGFN",
-              "value": "={{ $json.output.QuantidadeParcelamentoPGFN }}",
+              "value": "[REDACTED]",
               "type": "string"
             }
           ]
