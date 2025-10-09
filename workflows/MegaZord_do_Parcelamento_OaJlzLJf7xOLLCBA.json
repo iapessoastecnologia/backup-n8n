@@ -13,7 +13,7 @@
         "messages": {
           "messageValues": [
             {
-              "type": "[REDACTED]",
+              "type": "=SystemMessagePromptTemplate",
               "message": "={{ $json.PROMPT }}"
             }
           ]
@@ -48,13 +48,19 @@
         280
       ],
       "id": "be7e7e91-b536-4e3d-b69a-0d91fa43d83d",
-      "name": "OpenAI Chat Model"
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "KmxPJCVo0EDgxnqi",
+          "name": "API IA PESSOAS OG"
+        }
+      }
     },
     {
       "parameters": {
-        "jsonSchemaExample": "[REDACTED]"
+        "jsonSchemaExample": "{\n   \"Nome da Empresa\":\"JTD TRANSPORTES LTDA - CNPJ: 18.805.360/0001-26\",\n   \"Modalidade de Parcelamento\":{\n      \"Receita Federal\":[\n         {\n            \"Tipo\":\"Parcelamento Simplificado\"\n         },\n         {\n            \"Tipo\":\"Parcelamento Simplificado\"\n         }\n      ],\n      \"PGFN\":[\n         {\n            \"Conta\":\"006710266\"\n         },\n         {\n            \"Conta\":\"500310266\"\n         }\n      ]\n   },\n  \"QuantidadeParcelamentoIRPF\": 2,\n  \"QuantidadeParcelamentoPGFN\": 2\n}"
       },
-      "type": "[REDACTED]",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
         -2020,
@@ -105,7 +111,7 @@
         "messages": {
           "messageValues": [
             {
-              "type": "[REDACTED]",
+              "type": "=SystemMessagePromptTemplate",
               "message": "={{ $json.PROMPT }}"
             }
           ]
@@ -144,14 +150,14 @@
             },
             {
               "id": "60bbfa9c-38c5-4293-ba75-c4c0c7b8a92c",
-              "name": "[REDACTED]",
-              "value": "[REDACTED]",
+              "name": "QuantidadeParcelamentoIRPF",
+              "value": "={{ Number($json.output.QuantidadeParcelamentoIRPF) }}",
               "type": "string"
             },
             {
               "id": "8ad490fd-9738-488e-9be4-5741559705cb",
-              "name": "[REDACTED]",
-              "value": "[REDACTED]",
+              "name": "QuantidadeParcelamentoPGFN",
+              "value": "={{ $json.output.QuantidadeParcelamentoPGFN }}",
               "type": "string"
             }
           ]
@@ -179,14 +185,14 @@
             },
             {
               "id": "60bbfa9c-38c5-4293-ba75-c4c0c7b8a92c",
-              "name": "[REDACTED]",
-              "value": "[REDACTED]",
+              "name": "QuantidadeParcelamentoIRPF",
+              "value": "={{ Number($json.output.QuantidadeParcelamentoIRPF) }}",
               "type": "string"
             },
             {
               "id": "8ad490fd-9738-488e-9be4-5741559705cb",
-              "name": "[REDACTED]",
-              "value": "[REDACTED]",
+              "name": "QuantidadeParcelamentoPGFN",
+              "value": "={{ $json.output.QuantidadeParcelamentoPGFN }}",
               "type": "string"
             }
           ]
@@ -204,7 +210,7 @@
     },
     {
       "parameters": {
-        "aggregate": "[REDACTED]",
+        "aggregate": "aggregateAllItemData",
         "options": {}
       },
       "type": "n8n-nodes-base.aggregate",
@@ -218,7 +224,7 @@
     },
     {
       "parameters": {
-        "jsCode": "[REDACTED]"
+        "jsCode": "const data = $input.first().json.data;\nconst irpfValues = [];\nconst pgfnValues = [];\n\n// Coletar os valores\nfor (let i = 0; i < data.length; i++) {\n    if (data[i]['QuantidadeParcelamentoIRPF'] !== undefined) {\n        irpfValues.push(data[i]['QuantidadeParcelamentoIRPF']);\n    }\n    if (data[i]['QuantidadeParcelamentoPGFN'] !== undefined) {\n        pgfnValues.push(data[i]['QuantidadeParcelamentoPGFN']);\n    }\n}\n\n// Função para encontrar o valor mais frequente\nfunction encontrarMaisRepetido(arr) {\n    let maisRepetido = null;\n    let maxCount = 0;\n\n    for (let i = 0; i < arr.length; i++) {\n        let count = 0;\n        for (let j = 0; j < arr.length; j++) {\n            if (arr[i] === arr[j]) {\n                count++;\n            }\n        }\n        if (count > maxCount) {\n            maxCount = count;\n            maisRepetido = arr[i];\n        }\n    }\n\n    return maisRepetido;\n}\n\n// Encontrar os valores mais repetidos\nconst maisRepetidoIRPF = encontrarMaisRepetido(irpfValues);\nconst maisRepetidoPGFN = encontrarMaisRepetido(pgfnValues);\n\nreturn [{\n    json: {\n        maisRepetidoIRPF: maisRepetidoIRPF,\n        maisRepetidoPGFN: maisRepetidoPGFN\n    }\n}];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -274,7 +280,13 @@
         -65
       ],
       "id": "a57cffdd-ed27-4834-9474-fceb45226d16",
-      "name": "CRIAR ARQUIVAS1"
+      "name": "CRIAR ARQUIVAS1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ikCsPDocQe5HfNYt",
+          "name": "API GOOGLE"
+        }
+      }
     },
     {
       "parameters": {
@@ -326,7 +338,13 @@
       ],
       "id": "45dee7ab-6074-4dc9-aff1-594abaf07bd4",
       "name": "Google Drive1",
-      "alwaysOutputData": true
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "rzP1eQCZan8TdHlL",
+          "name": "API IA PESSOAS"
+        }
+      }
     },
     {
       "parameters": {
@@ -335,7 +353,7 @@
             {
               "id": "9015e1b4-e317-4ee5-a392-694dea44afae",
               "name": "PROMPT",
-              "value": "[REDACTED]",
+              "value": "=# Persona\nVocê é um robô especializado na extração de dados a partir de arquivos PDF.\n\n## Objetivo\n1 - Sua função é ler o conteúdo do PDF com total atenção, analisando cuidadosamente todas as informações contidas no arquivo. Quero que extraia os seguintes tópicos.\n\n**Nome da Empresa**: Nome da Empresa e CNPJ\n\n**Modalidade de Parcelamento**: Existem apenas dois tipos de parcelamento: `Receita Federal`, `PGFN`.\n\n**Dividindo o parcelamento por modalidades**:\n\n1. IRPF: Tudo apartir de **Diagnóstico Fiscal na Receita Federal** pertence a modalidade IRPF.\n2. PGFN: Tudo apartir de **Diagnóstico Fiscal na Procuradoria-Geral da Fazenda Nacional** pertence a modalidade PFGN.\n\n**Localização dos parcelamentos dentro de suas modalidades:**\n\n0. **(Ambas modalidades)**: Aparece **Pendência - Parcelamento** ou **Parcelamento com Exigibilidade Suspensa** e logo apos uma lista com os parcelamentos, junto do tipo, e parcelas em atraso e valor em atraso se existir.\n1. PGFN: Sempre possue uma **Conta**.\n2. IRPF:\n   - Sempre possue um **Tipo**.\n\n## Casos de uso:\n> REGRA DA PROCURA DE PARCELAS: Aparece **Pendência - Parcelamento** ou **Parcelamento com Exigibilidade Suspensa** e logo apos uma lista com os parcelamentos,\n\n\n## Prompt Negativo:\n\n\n1. NUNCA COLETAR DADOS DAS SEÇÕES PARECIDAS COM: \n    - **Inscrição com Exigibilidade Suspensa**\n    - **Pendência - Débito**\n    \n\n### 1. CASO IRPF\n**Input APROXIMADO**:\n```\nParcelamento com Exigibilidade Suspensa\n________________________________________________________\nCNPJ: 45.244.211/0001-08 SIMPLES NACIONAL\n- EM PARCELAMENTO Pendência\n```\n\nOutput:\n```json\n{\n  \"Tipo\": \"SIMPLES NACIONAL\",\n}\n```\n\n### 2. CASO IRPF\n**Input APROXIMADO**:\n```\nParcelamento com Exigibilidade Suspensa\n________________________________________________________\nCNPJ: 45.244.211/0001-08\n\nParcelamento: 02110001200573530192516 Valor Suspenso: 1.738,01 Parcelamento Simplificado\nParcelamento: 02110001200573530192516 Valor Suspenso: 1.738,01 Parcelamento IIIb\n```\n\nOutput:\n```json\n{\n  \"Tipo\": \"SIMPLIFICADO\",\n  \"Tipo\": \"IIIb\",\n}\n```\n\n### 3. CASO PGFN\n**Input APROXIMADO**:\n```\nParcelamento com Exigibilidade Suspensa\n________________________________________________________________\nCNPJ: 14.293.425/0001-40\n\nConta 012463434 TRANSACAO POR ADESAO - EDITAL PGDAU N 06/2024\nModalidade: SIMPLES NACIONAL - ME/EPP - PEQUENO VALOR - REDUCAO ATE 50% - ATE 12 MESES\n012463595 PARCELAMENTO CONVENCIONAL\nModalidade: PARCELAMENTO SEM GARANTIA - SIMPLES NACIONA\n```\n\nOutput:\n```json\n\"PGFN\": [\n  {\n    \"Conta\": \"012463434\"\n  },\n  {\n    \"Conta\": \"012463595\"\n  }\n]\n```\n\n---\n\n**Exemplo de Formatação:**\n```json\n{\n   \"Nome da Empresa\":\"JTD TRANSPORTES LTDA - CNPJ: 18.805.360/0001-26\",\n   \"Modalidade de Parcelamento\":{\n      \"IRPF\":[\n         {\n            \"Tipo\":\"SIMPLIFICADO\"\n         },\n         {\n            \"Tipo\":\"SIMPLIFICADO\"\n         }\n      ],\n      \"PGFN\":[\n         {\n            \"Conta\":\"006710266\"\n         },\n         {\n            \"Conta\":\"500310266\"\n         }\n      ]\n   },\n  \"QuantidadeParcelamentoIRPF\": 2,\n  \"QuantidadeParcelamentoPGFN\": 2\n}\n```\n\n## REGRAS GLOBAIS:\n1 - Nunca crie nenhum dado, coloque os nomes que foram informados, não simplifique e nem crie.\n2 - Extraia com precisão todos os dados relevantes e retorne em JSON.\n3 - Releia novamente e confira os dados.\n\n\n\n",
               "type": "string"
             }
           ]
@@ -426,7 +444,13 @@
         -140
       ],
       "id": "db20e674-9779-4b73-b46a-5f0386c0b590",
-      "name": "Google Sheets1"
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ikCsPDocQe5HfNYt",
+          "name": "API GOOGLE"
+        }
+      }
     },
     {
       "parameters": {
@@ -493,7 +517,13 @@
         -240
       ],
       "id": "5baf8d10-0eb9-445a-8ca4-6bc7cc659cde",
-      "name": "OpenAI Chat Model1"
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "KmxPJCVo0EDgxnqi",
+          "name": "API IA PESSOAS OG"
+        }
+      }
     },
     {
       "parameters": {
