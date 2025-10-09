@@ -1262,7 +1262,13 @@
     },
     "FILTRAR ARQUIVOS NÃO RENOMEADOS": {
       "main": [
-        []
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Schedule Trigger": {
