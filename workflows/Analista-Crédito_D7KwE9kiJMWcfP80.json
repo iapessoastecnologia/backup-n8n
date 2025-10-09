@@ -55,13 +55,7 @@
         180
       ],
       "id": "16032f2a-16f4-4885-891c-5bdc79d4845d",
-      "name": "OpenAI Chat Model",
-      "credentials": {
-        "openAiApi": {
-          "id": "tt7ZuQiKAHQoVWEc",
-          "name": "API IA PESSOAS"
-        }
-      }
+      "name": "OpenAI Chat Model"
     },
     {
       "parameters": {
@@ -103,13 +97,7 @@
         0
       ],
       "id": "0a0df81b-b903-4b09-8bb0-fc5f3d2ff779",
-      "name": "Supabase1",
-      "credentials": {
-        "supabaseApi": {
-          "id": "3JjufIVJZHwfvsHw",
-          "name": "Supabase account"
-        }
-      }
+      "name": "Supabase1"
     }
   ],
   "connections": {
