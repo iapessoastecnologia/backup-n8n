@@ -1,1 +1,572 @@
-{"createdAt":"2025-09-29T16:52:43.930Z","updatedAt":"2025-10-08T16:42:26.070Z","id":"N613UKYyqSYlSp4W","name":"NOTIFICAÇÃO TRIAGEM v2","active":true,"isArchived":false,"nodes":[{"parameters":{"resource":"message","guildId":{"__rl":true,"value":"1412776659505119316","mode":"list","cachedResultName":"Desenvolvimento - Dep IA","cachedResultUrl":"https://discord.com/channels/1412776659505119316"},"channelId":{"__rl":true,"value":"1417832389589209170","mode":"list","cachedResultName":"teste-bot","cachedResultUrl":"https://discord.com/channels/1412776659505119316/1417832389589209170"},"content":"={{ $json.content }}","options":{"flags":["SUPPRESS_NOTIFICATIONS","SUPPRESS_EMBEDS"]}},"type":"n8n-nodes-base.discord","typeVersion":2,"position":[1728,176],"id":"78b3f302-32c9-4e35-a2e3-ef08934bf569","name":"Envia a mensagem","webhookId":"beadca46-1293-406d-957f-20ace707fc5e","credentials":{"discordBotApi":{"id":"b3RHY2Z9JAZTOY8E","name":"Discord Bot - Notificação Triagem"}}},{"parameters":{},"type":"n8n-nodes-base.merge","typeVersion":3.2,"position":[816,32],"id":"b1840572-1571-48c3-b9e6-0ae7292d052a","name":"Merge"},{"parameters":{"rules":{"values":[{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"leftValue":"={{ $json['Data Criação'] }}","rightValue":"={{ $now.toFormat('dd/MM/yyyy') }}","operator":{"type":"string","operation":"contains"},"id":"916916bf-fd18-4953-90ec-779380516cac"}],"combinator":"and"},"renameOutput":true,"outputKey":"Adicionado"},{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"af2739d7-074a-4143-a92f-c7e39bde8c5e","leftValue":"={{$json['Data Modificação']}}","rightValue":"={{ $now.toFormat('dd/MM/yyyy') }}","operator":{"type":"string","operation":"contains"}}],"combinator":"and"},"renameOutput":true,"outputKey":"Modificado"}]},"options":{}},"type":"n8n-nodes-base.switch","typeVersion":3.2,"position":[352,16],"id":"a533f12b-4eab-429f-85bf-c62ecf9f1f13","name":"Switch add/mod","notesInFlow":true,"notes":"Verifica se a adição ou modificação foi feita naquele dia"},{"parameters":{"documentId":{"__rl":true,"value":"1160RATC80bli13YPXIKNn2ERPlKaWajFgcqnotbFB5A","mode":"list","cachedResultName":"[TESTE - TRIAGEM]","cachedResultUrl":"https://docs.google.com/spreadsheets/d/1160RATC80bli13YPXIKNn2ERPlKaWajFgcqnotbFB5A/edit?usp=drivesdk"},"sheetName":{"__rl":true,"value":"={{ $json.tab }}","mode":"name"},"options":{}},"type":"n8n-nodes-base.googleSheets","typeVersion":4.7,"position":[160,16],"id":"a18aaa45-a329-4acf-aa7c-f1f9606e5f94","name":"Lê planilha","notesInFlow":true,"credentials":{"googleSheetsOAuth2Api":{"id":"ikCsPDocQe5HfNYt","name":"API GOOGLE - IAPESSOAS"}},"notes":"Lê todas as linhas da planilha"},{"parameters":{"assignments":{"assignments":[{"id":"7f88ba67-aa66-447f-b5da-c0c06afa038b","name":"tab","value":"={{ $now.toFormat('yyyy-MM') }}","type":"string"},{"id":"cd6227c2-cf13-4a9d-8377-b08f4be45db3","name":"len","value":"={{ $now.toFormat('yyyy-MM').length }}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[-48,16],"id":"dd99ed44-cdf1-4722-80be-d58192a1ac29","name":"Cria campo","notesInFlow":true,"notes":"Cria campos para comparação da data com o nome da planilha"},{"parameters":{"rule":{"interval":[{"triggerAtHour":8},{"triggerAtHour":10,"triggerAtMinute":30},{"triggerAtHour":13},{"triggerAtHour":15,"triggerAtMinute":30},{"triggerAtHour":17},{"triggerAtHour":23,"triggerAtMinute":59}]}},"type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[-224,16],"id":"1c6d5a95-94b4-489a-98e4-1e34a8fbd782","name":"Schedule Trigger"},{"parameters":{"assignments":{"assignments":[{"id":"191b63df-4dcd-4d11-9921-e7509cc37b22","name":"empresa","value":"={{ $json.Caminho\n   .replaceAll('X CASTELO', '')\n   .replaceAll('Tudo', '')\n   .trimEnd()\n   .trimStart()\n}}\n","type":"string"},{"id":"b2348cb2-e2e6-4fb9-9bef-94560e27dde4","name":"link","value":"=https://drive.google.com/drive/folders/{{ $json['ID da Pasta'] }}","type":"string"},{"id":"66f08488-54f7-424e-983b-9e41da4b8af2","name":"ultima_modificacao","value":"={{$json['Data Modificação']}}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[592,128],"id":"73878cc8-c33f-4438-b740-84c1b47688fc","name":"Modificados","notesInFlow":true,"notes":"Adiciona campos de modificados para a mensagem"},{"parameters":{"assignments":{"assignments":[{"id":"191b63df-4dcd-4d11-9921-e7509cc37b22","name":"empresa","value":"={{ $json.Caminho\n   .replaceAll('X CASTELO', '')\n   .replaceAll('Tudo', '')\n   .trimEnd()\n   .trimStart()\n}}\n","type":"string"},{"id":"b2348cb2-e2e6-4fb9-9bef-94560e27dde4","name":"link","value":"=https://drive.google.com/drive/folders/{{ $json['ID da Pasta'] }}","type":"string"},{"id":"66f08488-54f7-424e-983b-9e41da4b8af2","name":"ultima_adicao","value":"={{ $json['Data Criação'] }}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[592,-80],"id":"0f2c5aa9-20c3-45c3-9f41-db27b7ba6bd4","name":"Adicionados","notesInFlow":true,"notes":"Adiciona campo de adição para a mensagem "},{"parameters":{"jsCode":"const items = $input.all();\n\n// Estruturas para agrupamento\nlet adicionados = {};\nlet modificados = {};\n\n// Distribui os itens em adicionados ou modificados\nfor (const item of items) {\n  const empresa = item.json.empresa;\n  const link = item.json.link;\n  const ultimaAdicao = item.json.ultima_adicao;\n  const ultimaModificacao = item.json.ultima_modificacao;\n\n  if (ultimaAdicao && ultimaAdicao !== \"undefined\") {\n    if (!adicionados[empresa]) adicionados[empresa] = {};\n    adicionados[empresa][link] = ultimaAdicao;\n  }\n\n  if (ultimaModificacao && ultimaModificacao !== \"undefined\") {\n    if (!modificados[empresa]) modificados[empresa] = {};\n    modificados[empresa][link] = ultimaModificacao;\n  }\n}\n\n// Função para montar mensagem de uma categoria\nfunction montarMensagem(titulo, empresas) {\n  let mensagens = [];\n  let bloco = `**${titulo}**, <@&1412776735401054219>!\\n\\n`;\n\n  for (const [empresa, pastas] of Object.entries(empresas)) {\n    let linha = `\\n**${empresa}**\\n`;\n\n    for (const [link, data] of Object.entries(pastas)) {\n      linha += `📂 Pasta: ${link}\\n🕒 Data: ${data}\\n===================================================\\n`;\n    }\n\n    linha += \"\\n\";\n\n    if ((bloco + linha).length > 1900) {\n      mensagens.push(bloco);\n      bloco = linha;\n    } else {\n      bloco += linha;\n    }\n  }\n\n  if (bloco.trim()) {\n    mensagens.push(bloco);\n  }\n\n  return mensagens;\n}\n\n// Monta mensagens finais\nlet mensagens = [];\nif (Object.keys(adicionados).length) {\n  mensagens.push(...montarMensagem(\"📥 Novos arquivos adicionados\", adicionados));\n}\nif (Object.keys(modificados).length) {\n  mensagens.push(...montarMensagem(\"✏️ Arquivos modificados\", modificados));\n}\n\n// Retorna para o Discord\nreturn mensagens.map(m => ({ json: { content: m } }));"},"type":"n8n-nodes-base.code","typeVersion":2,"position":[1536,176],"id":"aaa347ce-5bd8-436d-a416-a8265404e370","name":"Set Message"},{"parameters":{"operation":"get","dataTableId":{"__rl":true,"value":"bATe8gkBRpuHnESp","mode":"list","cachedResultName":"Notificacao triagem","cachedResultUrl":"/projects/g8BnYlos8HJUUVcr/datatables/bATe8gkBRpuHnESp"},"returnAll":true},"type":"n8n-nodes-base.dataTable","typeVersion":1,"position":[448,336],"id":"c1eebd4c-9c56-40a4-9259-9a4f4030aaba","name":"Get row(s)"},{"parameters":{"jsCode":"const items = $input.all();\n\n// Detecta se string está em ISO\nfunction isISO(dateStr) {\n  return /^\\d{4}-\\d{2}-\\d{2}T/.test(dateStr);\n}\n\n// Converte dd/MM/yyyy HH:mm:ss (BR) → Date UTC\nfunction parseBRDate(dateStr) {\n  if (!dateStr) return null;\n  const [datePart, timePart] = dateStr.split(\" \");\n  const [day, month, year] = datePart.split(\"/\").map(Number);\n  const [hours, minutes, seconds] = (timePart || \"00:00:00\").split(\":\").map(Number);\n\n  // cria a data no fuso de Brasília (UTC-3) e converte para UTC\n  const local = new Date(year, month - 1, day, hours, minutes, seconds);\n  const utc = new Date(local.getTime() + (3 * 60 * 60 * 1000)); // soma 3h\n  return utc;\n}\n\n// Converte qualquer data (ISO ou BR) para Date UTC\nfunction toDate(dateStr) {\n  if (!dateStr) return null;\n  if (isISO(dateStr)) return new Date(dateStr); // já UTC\n  return parseBRDate(dateStr);\n}\n\n// Separa DataTable e planilha\nconst dataTableRows = items.filter(i => i.json.updatedAt);\nconst planilhaRows = items.filter(i => i.json.ultima_adicao || i.json.ultima_modificacao);\n\n// Último updatedAt (UTC)\nconst updatedAtList = dataTableRows.map(i => new Date(i.json.updatedAt));\nconst lastUpdatedAt = updatedAtList.length\n  ? new Date(Math.max(...updatedAtList.map(d => d.getTime())))\n  : null;\n\n// Filtra os mais recentes\nconst result = planilhaRows.filter(item => {\n  const ultimaAdicao = toDate(item.json.ultima_adicao);\n  const ultimaModificacao = toDate(item.json.ultima_modificacao);\n\n  return (\n    (ultimaAdicao && (!lastUpdatedAt || ultimaAdicao > lastUpdatedAt)) ||\n    (ultimaModificacao && (!lastUpdatedAt || ultimaModificacao > lastUpdatedAt))\n  );\n});\n\nreturn result;\n"},"type":"n8n-nodes-base.code","typeVersion":2,"position":[1280,48],"id":"d578c625-a3fd-48c6-bdeb-00844e0d2af2","name":"Code in JavaScript3"},{"parameters":{},"type":"n8n-nodes-base.merge","typeVersion":3.2,"position":[1056,48],"id":"40b51308-8e80-4115-9fb0-78bd4215a47a","name":"Merge1"},{"parameters":{"operation":"upsert","dataTableId":{"__rl":true,"value":"bATe8gkBRpuHnESp","mode":"list","cachedResultName":"Notificacao triagem","cachedResultUrl":"/projects/g8BnYlos8HJUUVcr/datatables/bATe8gkBRpuHnESp"},"filters":{"conditions":[{"keyName":"atualizadoEm","condition":"isEmpty"}]},"columns":{"mappingMode":"defineBelow","value":{"atualizadoEm":"={{ $now }}"},"matchingColumns":["verificacao"],"schema":[{"id":"atualizadoEm","displayName":"atualizadoEm","required":false,"defaultMatch":false,"display":true,"type":"dateTime","readOnly":false,"removed":false}],"attemptToConvertTypes":false,"convertFieldsToString":false}},"type":"n8n-nodes-base.dataTable","typeVersion":1,"position":[1536,-48],"id":"95d51c69-6b0c-4133-a254-2c5540b0c5bf","name":"Upsert row(s)","executeOnce":true}],"connections":{"Envia a mensagem":{"main":[[]]},"Merge":{"main":[[{"node":"Merge1","type":"main","index":0}]]},"Switch add/mod":{"main":[[{"node":"Adicionados","type":"main","index":0}],[{"node":"Modificados","type":"main","index":0}]]},"Lê planilha":{"main":[[{"node":"Switch add/mod","type":"main","index":0}]]},"Cria campo":{"main":[[{"node":"Lê planilha","type":"main","index":0}]]},"Schedule Trigger":{"main":[[{"node":"Cria campo","type":"main","index":0},{"node":"Get row(s)","type":"main","index":0}]]},"Modificados":{"main":[[{"node":"Merge","type":"main","index":1}]]},"Adicionados":{"main":[[{"node":"Merge","type":"main","index":0}]]},"Set Message":{"main":[[{"node":"Envia a mensagem","type":"main","index":0}]]},"Get row(s)":{"main":[[{"node":"Merge1","type":"main","index":1}]]},"Code in JavaScript3":{"main":[[{"node":"Set Message","type":"main","index":0},{"node":"Upsert row(s)","type":"main","index":0}]]},"Merge1":{"main":[[{"node":"Code in JavaScript3","type":"main","index":0}]]}},"settings":{"executionOrder":"v1","callerPolicy":"workflowsFromSameOwner","errorWorkflow":"GJoEkByGgHbx83q5"},"staticData":{"node:Google Drive Trigger":{"lastTimeChecked":"2025-09-16T20:14:07Z"},"node:Schedule Trigger":{"recurrenceRules":[]}},"meta":{"templateCredsSetupCompleted":true},"pinData":{},"versionId":"f9e569ba-2495-476a-a6b4-3093246df0d6","triggerCount":1,"shared":[{"createdAt":"2025-09-29T16:52:43.930Z","updatedAt":"2025-09-29T16:52:43.930Z","role":"workflow:owner","workflowId":"N613UKYyqSYlSp4W","projectId":"g8BnYlos8HJUUVcr","project":{"createdAt":"2025-05-28T13:28:04.746Z","updatedAt":"2025-05-28T13:31:33.202Z","id":"g8BnYlos8HJUUVcr","name":"IA Pessoas <comercial@castelobrancocontabilidade.com.br>","type":"personal","icon":null,"description":null,"projectRelations":[{"createdAt":"2025-05-28T13:28:04.746Z","updatedAt":"2025-05-28T13:28:04.746Z","userId":"17ee4480-754a-4392-9fc2-a6bc3c46ebad","projectId":"g8BnYlos8HJUUVcr","user":{"createdAt":"2025-05-28T13:28:03.022Z","updatedAt":"2025-10-08T03:00:53.489Z","id":"17ee4480-754a-4392-9fc2-a6bc3c46ebad","email":"comercial@castelobrancocontabilidade.com.br","firstName":"IA","lastName":"Pessoas","personalizationAnswers":{"version":"v4","personalization_survey_submitted_at":"2025-05-28T13:31:41.717Z","personalization_survey_n8n_version":"1.94.1"},"settings":{"userActivated":true,"easyAIWorkflowOnboarded":true,"firstSuccessfulWorkflowId":"fN5uSWvKRujKur6R","userActivatedAt":1757621781409,"npsSurvey":{"responded":true,"lastShownAt":1749478378830},"dismissedCallouts":{"preBuiltAgentsCalloutHttpRequest":true,"preBuiltAgentsCalloutGoogleDrive":true,"preBuiltAgentsModalCallout":true,"preBuiltAgentsCallout":true}},"disabled":false,"mfaEnabled":false,"lastActiveAt":"2025-10-08","isPending":false}}]}}],"tags":[{"createdAt":"2025-06-05T19:11:47.772Z","updatedAt":"2025-06-05T19:11:47.772Z","id":"QxWPCrzStxcHudYm","name":"Johan"}]}
+{
+  "createdAt": "2025-09-29T16:52:43.930Z",
+  "id": "N613UKYyqSYlSp4W",
+  "name": "NOTIFICAÇÃO TRIAGEM v2",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1412776659505119316",
+          "mode": "list",
+          "cachedResultName": "Desenvolvimento - Dep IA",
+          "cachedResultUrl": "[REDACTED]"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1417832389589209170",
+          "mode": "list",
+          "cachedResultName": "teste-bot",
+          "cachedResultUrl": "[REDACTED]"
+        },
+        "content": "={{ $json.content }}",
+        "options": {
+          "flags": [
+            "SUPPRESS_NOTIFICATIONS",
+            "SUPPRESS_EMBEDS"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1728,
+        176
+      ],
+      "id": "78b3f302-32c9-4e35-a2e3-ef08934bf569",
+      "name": "Envia a mensagem",
+      "webhookId": "beadca46-1293-406d-957f-20ace707fc5e"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        816,
+        32
+      ],
+      "id": "b1840572-1571-48c3-b9e6-0ae7292d052a",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json['Data Criação'] }}",
+                    "rightValue": "={{ $now.toFormat('dd/MM/yyyy') }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "916916bf-fd18-4953-90ec-779380516cac"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "[REDACTED]"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "af2739d7-074a-4143-a92f-c7e39bde8c5e",
+                    "leftValue": "={{$json['Data Modificação']}}",
+                    "rightValue": "={{ $now.toFormat('dd/MM/yyyy') }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "[REDACTED]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        352,
+        16
+      ],
+      "id": "a533f12b-4eab-429f-85bf-c62ecf9f1f13",
+      "name": "Switch add/mod",
+      "notesInFlow": true,
+      "notes": "Verifica se a adição ou modificação foi feita naquele dia"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "[REDACTED]",
+          "mode": "list",
+          "cachedResultName": "[TESTE - TRIAGEM]",
+          "cachedResultUrl": "[REDACTED]"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $json.tab }}",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        16
+      ],
+      "id": "a18aaa45-a329-4acf-aa7c-f1f9606e5f94",
+      "name": "Lê planilha",
+      "notesInFlow": true,
+      "notes": "Lê todas as linhas da planilha"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7f88ba67-aa66-447f-b5da-c0c06afa038b",
+              "name": "tab",
+              "value": "={{ $now.toFormat('yyyy-MM') }}",
+              "type": "string"
+            },
+            {
+              "id": "cd6227c2-cf13-4a9d-8377-b08f4be45db3",
+              "name": "len",
+              "value": "={{ $now.toFormat('yyyy-MM').length }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -48,
+        16
+      ],
+      "id": "dd99ed44-cdf1-4722-80be-d58192a1ac29",
+      "name": "Cria campo",
+      "notesInFlow": true,
+      "notes": "Cria campos para comparação da data com o nome da planilha"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            },
+            {
+              "triggerAtHour": 10,
+              "triggerAtMinute": 30
+            },
+            {
+              "triggerAtHour": 13
+            },
+            {
+              "triggerAtHour": 15,
+              "triggerAtMinute": 30
+            },
+            {
+              "triggerAtHour": 17
+            },
+            {
+              "triggerAtHour": 23,
+              "triggerAtMinute": 59
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -192,
+        464
+      ],
+      "id": "1c6d5a95-94b4-489a-98e4-1e34a8fbd782",
+      "name": "Schedule Trigger",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191b63df-4dcd-4d11-9921-e7509cc37b22",
+              "name": "empresa",
+              "value": "={{ $json.Caminho\n   .replaceAll('X CASTELO', '')\n   .replaceAll('Tudo', '')\n   .trimEnd()\n   .trimStart()\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "b2348cb2-e2e6-4fb9-9bef-94560e27dde4",
+              "name": "link",
+              "value": "=https://drive.google.com/drive/folders/{{ $json['ID da Pasta'] }}",
+              "type": "string"
+            },
+            {
+              "id": "66f08488-54f7-424e-983b-9e41da4b8af2",
+              "name": "ultima_modificacao",
+              "value": "={{$json['Data Modificação']}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        592,
+        128
+      ],
+      "id": "73878cc8-c33f-4438-b740-84c1b47688fc",
+      "name": "Modificados",
+      "notesInFlow": true,
+      "notes": "Adiciona campos de modificados para a mensagem"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "191b63df-4dcd-4d11-9921-e7509cc37b22",
+              "name": "empresa",
+              "value": "={{ $json.Caminho\n   .replaceAll('X CASTELO', '')\n   .replaceAll('Tudo', '')\n   .trimEnd()\n   .trimStart()\n}}\n",
+              "type": "string"
+            },
+            {
+              "id": "b2348cb2-e2e6-4fb9-9bef-94560e27dde4",
+              "name": "link",
+              "value": "=https://drive.google.com/drive/folders/{{ $json['ID da Pasta'] }}",
+              "type": "string"
+            },
+            {
+              "id": "66f08488-54f7-424e-983b-9e41da4b8af2",
+              "name": "ultima_adicao",
+              "value": "={{ $json['Data Criação'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        592,
+        -80
+      ],
+      "id": "0f2c5aa9-20c3-45c3-9f41-db27b7ba6bd4",
+      "name": "Adicionados",
+      "notesInFlow": true,
+      "notes": "Adiciona campo de adição para a mensagem "
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Estruturas para agrupamento\nlet adicionados = {};\nlet modificados = {};\n\n// Distribui os itens em adicionados ou modificados\nfor (const item of items) {\n  const empresa = item.json.empresa;\n  const link = item.json.link;\n  const ultimaAdicao = item.json.ultima_adicao;\n  const ultimaModificacao = item.json.ultima_modificacao;\n\n  if (ultimaAdicao && ultimaAdicao !== \"undefined\") {\n    if (!adicionados[empresa]) adicionados[empresa] = {};\n    adicionados[empresa][link] = ultimaAdicao;\n  }\n\n  if (ultimaModificacao && ultimaModificacao !== \"undefined\") {\n    if (!modificados[empresa]) modificados[empresa] = {};\n    modificados[empresa][link] = ultimaModificacao;\n  }\n}\n\n// Função para montar mensagem de uma categoria\nfunction montarMensagem(titulo, empresas) {\n  let mensagens = [];\n  let bloco = `**${titulo}**, <@&1412776735401054219>!\\n\\n`;\n\n  for (const [empresa, pastas] of Object.entries(empresas)) {\n    let linha = `\\n**${empresa}**\\n`;\n\n    for (const [link, data] of Object.entries(pastas)) {\n      linha += `📂 Pasta: ${link}\\n🕒 Data: ${data}\\n===================================================\\n`;\n    }\n\n    linha += \"\\n\";\n\n    if ((bloco + linha).length > 1900) {\n      mensagens.push(bloco);\n      bloco = linha;\n    } else {\n      bloco += linha;\n    }\n  }\n\n  if (bloco.trim()) {\n    mensagens.push(bloco);\n  }\n\n  return mensagens;\n}\n\n// Monta mensagens finais\nlet mensagens = [];\nif (Object.keys(adicionados).length) {\n  mensagens.push(...montarMensagem(\"📥 Novos arquivos adicionados\", adicionados));\n}\nif (Object.keys(modificados).length) {\n  mensagens.push(...montarMensagem(\"✏️ Arquivos modificados\", modificados));\n}\n\n// Retorna para o Discord\nreturn mensagens.map(m => ({ json: { content: m } }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        176
+      ],
+      "id": "aaa347ce-5bd8-436d-a416-a8265404e370",
+      "name": "Set Message"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "bATe8gkBRpuHnESp",
+          "mode": "list",
+          "cachedResultName": "Notificacao triagem",
+          "cachedResultUrl": "[REDACTED]"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        448,
+        336
+      ],
+      "id": "c1eebd4c-9c56-40a4-9259-9a4f4030aaba",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\n// Detecta se string está em ISO\nfunction isISO(dateStr) {\n  return /^\\d{4}-\\d{2}-\\d{2}T/.test(dateStr);\n}\n\n// Converte dd/MM/yyyy HH:mm:ss (BR) → Date UTC\nfunction parseBRDate(dateStr) {\n  if (!dateStr) return null;\n  const [datePart, timePart] = dateStr.split(\" \");\n  const [day, month, year] = datePart.split(\"/\").map(Number);\n  const [hours, minutes, seconds] = (timePart || \"00:00:00\").split(\":\").map(Number);\n\n  // cria a data no fuso de Brasília (UTC-3) e converte para UTC\n  const local = new Date(year, month - 1, day, hours, minutes, seconds);\n  const utc = new Date(local.getTime() + (3 * 60 * 60 * 1000)); // soma 3h\n  return utc;\n}\n\n// Converte qualquer data (ISO ou BR) para Date UTC\nfunction toDate(dateStr) {\n  if (!dateStr) return null;\n  if (isISO(dateStr)) return new Date(dateStr); // já UTC\n  return parseBRDate(dateStr);\n}\n\n// Separa DataTable e planilha\nconst dataTableRows = items.filter(i => i.json.updatedAt);\nconst planilhaRows = items.filter(i => i.json.ultima_adicao || i.json.ultima_modificacao);\n\n// Último updatedAt (UTC)\nconst updatedAtList = dataTableRows.map(i => new Date(i.json.updatedAt));\nconst lastUpdatedAt = updatedAtList.length\n  ? new Date(Math.max(...updatedAtList.map(d => d.getTime())))\n  : null;\n\n// Filtra os mais recentes\nconst result = planilhaRows.filter(item => {\n  const ultimaAdicao = toDate(item.json.ultima_adicao);\n  const ultimaModificacao = toDate(item.json.ultima_modificacao);\n\n  return (\n    (ultimaAdicao && (!lastUpdatedAt || ultimaAdicao > lastUpdatedAt)) ||\n    (ultimaModificacao && (!lastUpdatedAt || ultimaModificacao > lastUpdatedAt))\n  );\n});\n\nreturn result;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        48
+      ],
+      "id": "d578c625-a3fd-48c6-bdeb-00844e0d2af2",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1056,
+        48
+      ],
+      "id": "40b51308-8e80-4115-9fb0-78bd4215a47a",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "bATe8gkBRpuHnESp",
+          "mode": "list",
+          "cachedResultName": "Notificacao triagem",
+          "cachedResultUrl": "[REDACTED]"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "[REDACTED]",
+              "condition": "isEmpty"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "atualizadoEm": "={{ $now }}"
+          },
+          "matchingColumns": [
+            "verificacao"
+          ],
+          "schema": [
+            {
+              "id": "atualizadoEm",
+              "displayName": "atualizadoEm",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        -48
+      ],
+      "id": "95d51c69-6b0c-4133-a254-2c5540b0c5bf",
+      "name": "Upsert row(s)",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -256,
+        16
+      ],
+      "id": "c204e6c1-7e5c-49bc-8d5c-b230b63eb6b1",
+      "name": "Schedule Trigger1"
+    }
+  ],
+  "connections": {
+    "Envia a mensagem": {
+      "main": [
+        []
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch add/mod": {
+      "main": [
+        [
+          {
+            "node": "Adicionados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Modificados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lê planilha": {
+      "main": [
+        [
+          {
+            "node": "Switch add/mod",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cria campo": {
+      "main": [
+        [
+          {
+            "node": "Lê planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Modificados": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Adicionados": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Message": {
+      "main": [
+        [
+          {
+            "node": "Envia a mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Set Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Cria campo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
