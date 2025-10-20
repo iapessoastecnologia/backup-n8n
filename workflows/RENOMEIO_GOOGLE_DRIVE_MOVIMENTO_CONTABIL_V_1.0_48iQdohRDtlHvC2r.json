@@ -805,7 +805,8 @@
         2128
       ],
       "id": "b5c1e84a-589f-407c-83d5-0a6d8160fcab",
-      "name": "Search files and folders"
+      "name": "Search files and folders",
+      "retryOnFail": true
     },
     {
       "parameters": {
