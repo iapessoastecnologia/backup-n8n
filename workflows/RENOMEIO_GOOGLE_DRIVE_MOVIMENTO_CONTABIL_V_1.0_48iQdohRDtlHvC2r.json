@@ -728,7 +728,8 @@
         1984
       ],
       "id": "ddeb8f28-5e67-4cf2-ba34-68c6181a4332",
-      "name": "PROCURAR NOME \"MOVIMENTO\""
+      "name": "PROCURAR NOME \"MOVIMENTO\"",
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -750,7 +751,8 @@
         1984
       ],
       "id": "78eafef3-c6f6-49b6-94a7-6cf3106efa5c",
-      "name": "VARREDURA NAS PASTAS DE MOVIMENTO"
+      "name": "VARREDURA NAS PASTAS DE MOVIMENTO",
+      "retryOnFail": true
     },
     {
       "parameters": {
