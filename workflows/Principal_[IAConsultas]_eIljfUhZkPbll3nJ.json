@@ -111,8 +111,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1200,
-        528
+        1296,
+        544
       ],
       "id": "20408a60-42b6-4e5d-b15e-3a436ff65aa8",
       "name": "pega_usuario",
@@ -128,7 +128,7 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        1584,
+        1568,
         672
       ],
       "id": "3c9c4e97-8d4c-4c9c-9fa6-120bdb66d12f",
@@ -207,7 +207,7 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        1936,
+        1904,
         672
       ],
       "id": "839a5f5b-6fa8-49ff-bb5b-0bab9c3882fb",
@@ -224,7 +224,7 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        2144,
+        2064,
         672
       ],
       "id": "c286b4ab-71cd-4bc6-98a0-ec8d1d0dbafb",
@@ -237,6 +237,7 @@
           "__rl": true,
           "value": "ZKzuWwwv0sEwEnlT",
           "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "criar_agendamento"
         },
         "workflowInputs": {
@@ -305,7 +306,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        2464,
+        2528,
         672
       ],
       "id": "22d28107-2248-42dc-bbeb-deacd21bf79f",
@@ -318,6 +319,7 @@
           "__rl": true,
           "value": "rJ0iIfdWHdgiiTHq",
           "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "cancelar_agendamento"
         },
         "workflowInputs": {
@@ -347,7 +349,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        2672,
+        2720,
         672
       ],
       "id": "03775a63-7e27-4ade-ad0c-9af485625b75",
@@ -360,6 +362,7 @@
           "__rl": true,
           "value": "sMp9fq5pHs7ifE0e",
           "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "agente_db_admin"
         },
         "workflowInputs": {
@@ -583,7 +586,7 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        -64,
+        64,
         320
       ],
       "id": "df161c36-a69e-4c1d-9b0e-1e103e67124f",
@@ -596,6 +599,7 @@
           "__rl": true,
           "value": "35ZK3bQrEy5cHrYZ",
           "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
           "cachedResultName": "consulta_disponibilidade"
         },
         "workflowInputs": {
@@ -642,7 +646,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        2304,
+        2336,
         672
       ],
       "id": "3a3d361c-e1de-420e-bca6-aefce222df20",
