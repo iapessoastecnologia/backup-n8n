@@ -111,8 +111,8 @@
       "type": "n8n-nodes-base.supabase",
       "typeVersion": 1,
       "position": [
-        1296,
-        544
+        1216,
+        528
       ],
       "id": "20408a60-42b6-4e5d-b15e-3a436ff65aa8",
       "name": "pega_usuario",
