@@ -128,7 +128,7 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        1568,
+        1584,
         672
       ],
       "id": "3c9c4e97-8d4c-4c9c-9fa6-120bdb66d12f",
@@ -173,7 +173,7 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        1744,
+        1760,
         672
       ],
       "id": "6283c7bc-1f7a-4db4-ae61-36582e321e5b",
@@ -207,7 +207,7 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        1904,
+        1936,
         672
       ],
       "id": "839a5f5b-6fa8-49ff-bb5b-0bab9c3882fb",
@@ -224,7 +224,7 @@
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
-        2064,
+        2128,
         672
       ],
       "id": "c286b4ab-71cd-4bc6-98a0-ec8d1d0dbafb",
