@@ -1,1 +1,1670 @@
-{"createdAt":"2025-11-12T13:20:53.379Z","id":"R0oa5xofWg2aWomx","name":"RENOMEIO GOOGLE DRIVE MOVIMENTO CONTABIL V 2.0 OG","active":false,"isArchived":false,"nodes":[{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"a1a462b5-53ac-4af0-9216-c85b3827b8d5","leftValue":"={{ $json.name.includes('.pdf') }}","rightValue":"","operator":{"type":"boolean","operation":"true","singleValue":true}},{"id":"48208eb1-bc8f-4810-a7d9-83179814d06b","leftValue":"={{ $json.name.includes('.jpg') }}","rightValue":"","operator":{"type":"boolean","operation":"true","singleValue":true}},{"id":"469a8599-cc65-4e7f-adc9-b7272f2cf7ee","leftValue":"={{ $json.name.includes('.PDF') }}","rightValue":"","operator":{"type":"boolean","operation":"true","singleValue":true}},{"id":"2ede9023-2e61-4e49-8273-46cc84079e04","leftValue":"={{ $json.name.includes('.jpeg') }}","rightValue":"","operator":{"type":"boolean","operation":"true","singleValue":true}},{"id":"1cbe92b2-d97e-4c0a-88f6-64edccabea87","leftValue":"={{ $json.name.includes('.png') }}","rightValue":"","operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"or"},"options":{}},"type":"n8n-nodes-base.filter","typeVersion":2.2,"position":[-848,1872],"id":"472058aa-153a-4506-8fa5-5df3d2e939f8","name":"FILTRO TIPO DE ARQUIVO"},{"parameters":{"operation":"pdf","options":{}},"type":"n8n-nodes-base.extractFromFile","typeVersion":1,"position":[176,1920],"id":"7861b88b-4d19-4fce-b9ae-7c70758fcb8b","name":"EXTRAÇÃO DO PDF","retryOnFail":false,"alwaysOutputData":false,"executeOnce":false,"onError":"continueErrorOutput"},{"parameters":{"conditions":{"options":{"caseSensitive":false,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"01e0a39b-0dce-4e56-9d74-72d6011fd69d","leftValue":"={{ $json.text }}","rightValue":"","operator":{"type":"string","operation":"empty","singleValue":true}},{"id":"83546bc8-1221-40a4-a9ce-2bf7eb823dff","leftValue":"={{ $json.text }}","rightValue":"=^\\s*$","operator":{"type":"string","operation":"regex"}},{"id":"1342be4f-c657-4ee7-8181-d5dcd4360379","leftValue":"={{ (($json.text ?? '')).length < 30 }}","rightValue":"={{ $json.text.length < 30 ? \"\" : $json.text }}","operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"or"},"options":{"ignoreCase":true}},"type":"n8n-nodes-base.if","typeVersion":2.2,"position":[752,1904],"id":"57a7fbfe-819f-4b6b-a376-9a3eeef33f25","name":"SE O TEXTO FOR VAZIO"},{"parameters":{"content":"## Agente Responsavel por renomear Imagens\n\n\n","height":476,"width":1080},"type":"n8n-nodes-base.stickyNote","typeVersion":1,"position":[688,2384],"id":"0e375846-fb1f-4b43-b553-0474665ef54b","name":"Sticky Note"},{"parameters":{"content":"## Varredura de arquivos do drive e filtragem\n","height":556,"width":2104,"color":5},"type":"n8n-nodes-base.stickyNote","typeVersion":1,"position":[-2560,1824],"id":"7cc659c8-cd83-49e7-9c1a-8ac5081c2523","name":"Sticky Note1"},{"parameters":{"assignments":{"assignments":[{"id":"4a2fe75b-0ab7-4a66-b6c6-ad4a8da7fd2f","name":"=ID","value":"={{ $('BAIXA ARQUIVOS').item.json.ID }}","type":"string"},{"id":"cc351c79-e5a6-4604-a6de-a333a134f574","name":"name","value":"={{ $('BAIXA ARQUIVOS').item.json.name }}","type":"string"},{"id":"8c96cd2d-5c5a-4a47-8858-f39cd5b3bdda","name":"text","value":"={{ $json.text }}","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[448,1904],"id":"4fc48f5f-9809-4829-a715-435b57b48000","name":"JUNTA TODOS OS DADOS"},{"parameters":{"content":"## Baixa os arquivos, extrai informações e chama os subfluxos para cada caso\n\n\n\n","height":556,"width":1112,"color":4},"type":"n8n-nodes-base.stickyNote","typeVersion":1,"position":[-448,1824],"id":"60373be7-4389-4d2d-a69a-b751c3a7b905","name":"Sticky Note2"},{"parameters":{"content":"## Agente Responsável por renomear PDFS com texto Extraivel\n","height":540,"width":1080},"type":"n8n-nodes-base.stickyNote","typeVersion":1,"position":[688,1824],"id":"e9f44e71-2768-4144-b173-275214a4b8d3","name":"Sticky Note3"},{"parameters":{"content":"🚀 **Ferramentas utilizadas no fluxo**\n\n🟦 **Google Drive**  \nNó: Google Drive  \nFunção: Upload, download e gerenciamento de arquivos\n\n🤖 **OpenAI**  \nNó: HTTP Request + Funções  \nFunção: Processamento, análise e geração de texto com IA\n","height":280,"width":540,"color":6},"type":"n8n-nodes-base.stickyNote","typeVersion":1,"position":[-1616,1504],"id":"c779ebf2-5e41-4e25-9db5-bfa3ba4c468d","name":"Sticky Note4"},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"loose","version":2},"conditions":[{"id":"2beea2a1-ff79-4412-9d9a-f552009ea040","leftValue":"={{ $json.createdTime }}","rightValue":"2025-11-12T08:00:00","operator":{"type":"dateTime","operation":"after"}}],"combinator":"and"},"looseTypeValidation":true,"options":{}},"type":"n8n-nodes-base.filter","typeVersion":2.2,"position":[-1008,1872],"id":"2d51d7ca-dbee-436b-933c-d6d39599eda3","name":"Filtrar por data"},{"parameters":{"url":"=https://www.googleapis.com/drive/v3/files/{{$json.ID}}?alt=media&supportsAllDrives=true","authentication":"[REDACTED]","options":{"response":{"response":{"responseFormat":"file"}}}},"type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[448,2016],"id":"bd646e48-d5a9-4475-9510-916c331bcdbc","name":"BAIXA ARQUIVOS","retryOnFail":false},{"parameters":{"batchSize":6,"options":{}},"type":"n8n-nodes-base.splitInBatches","typeVersion":3,"position":[-384,1936],"id":"27a6222a-1bda-4587-b0ee-4338ac968fd3","name":"Loop Over Items","retryOnFail":false,"executeOnce":false},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"10bcaaa0-e92e-4ee4-8920-357d15b51ba0","leftValue":"={{ $json.name }}","rightValue":".pdf","operator":{"type":"string","operation":"contains"}},{"id":"89f11755-c4c5-4c22-a14c-45fc89260bc6","leftValue":"={{ $json.name }}","rightValue":".PDF","operator":{"type":"string","operation":"contains"}}],"combinator":"or"},"options":{}},"type":"n8n-nodes-base.if","typeVersion":2.2,"position":[752,2080],"id":"91e82972-ea6f-47f3-b487-2452fed03b79","name":"É UM PDF ?"},{"parameters":{"workflowId":{"__rl":true,"value":"uTiS3qSlbvXUlCnx","mode":"list","cachedResultUrl":"[REDACTED]","cachedResultName":"RENOMEIO PDF INCORRETO"},"workflowInputs":{"mappingMode":"defineBelow","value":{"ID":"={{ $json.ID }}","name":"={{ $json.name }}"},"matchingColumns":[],"schema":[{"id":"ID","displayName":"ID","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string"},{"id":"name","displayName":"name","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string","removed":false}],"attemptToConvertTypes":false,"convertFieldsToString":true},"options":{"waitForSubWorkflow":true}},"type":"n8n-nodes-base.executeWorkflow","typeVersion":1.2,"position":[1616,1888],"id":"f7583a0a-7427-4e8f-aa42-732d4ebacaad","name":"RENOMEIA PDF VAZIO"},{"parameters":{"workflowId":{"__rl":true,"value":"fN5uSWvKRujKur6R","mode":"list","cachedResultUrl":"[REDACTED]","cachedResultName":"RENOMEIO PDFS INCORRETOS(ERRO)"},"workflowInputs":{"mappingMode":"defineBelow","value":{"ID":"={{ $json.ID }}","name":"={{ $json.name }}"},"matchingColumns":[],"schema":[{"id":"ID","displayName":"ID","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string","removed":false},{"id":"name","displayName":"name","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string","removed":false}],"attemptToConvertTypes":false,"convertFieldsToString":true},"options":{"waitForSubWorkflow":false}},"type":"n8n-nodes-base.executeWorkflow","typeVersion":1.2,"position":[2368,2272],"id":"3e42f237-79ab-4057-8e1c-a225193c0b3d","name":"RENOMEIA PDF SCANNEAVEL"},{"parameters":{"workflowId":{"__rl":true,"value":"YDH3keRYE4xE3V2m","mode":"list","cachedResultUrl":"[REDACTED]","cachedResultName":"RENOMEIA IMAGENS"},"workflowInputs":{"mappingMode":"defineBelow","value":{"ID":"={{ $json.ID }}","name":"={{ $json.name}}"},"matchingColumns":[],"schema":[{"id":"ID","displayName":"ID","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string"},{"id":"name","displayName":"name","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string"}],"attemptToConvertTypes":false,"convertFieldsToString":true},"options":{"waitForSubWorkflow":true}},"type":"n8n-nodes-base.executeWorkflow","typeVersion":1.2,"position":[2368,2496],"id":"08726ada-0de8-4b4f-9a04-dfe46d3dd2b3","name":"RENOMEIA IMAGEM"},{"parameters":{"workflowId":{"__rl":true,"value":"Wc7jGiKMw11GOwwj","mode":"list","cachedResultUrl":"[REDACTED]","cachedResultName":"RENOMEIA PDFS"},"workflowInputs":{"mappingMode":"defineBelow","value":{"ID":"={{ $json.ID }}","name":"={{ $json.name }}","text":"={{ $json.text }}"},"matchingColumns":[],"schema":[{"id":"ID","displayName":"ID","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string"},{"id":"name","displayName":"name","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string"},{"id":"text","displayName":"text","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string"}],"attemptToConvertTypes":false,"convertFieldsToString":true},"options":{"waitForSubWorkflow":true}},"type":"n8n-nodes-base.executeWorkflow","typeVersion":1.2,"position":[1632,2080],"id":"7602c2c9-7a15-415e-bdc2-5ead7b82dbda","name":"RENOMEIA PDF"},{"parameters":{"amount":1},"type":"n8n-nodes-base.wait","typeVersion":1.1,"position":[-208,2016],"id":"f071efce-2b22-4a74-9a64-03f4cead99a2","name":"Wait","webhookId":"17ffbf93-dc4a-43a5-b1c1-17879e1fe976"},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"e0d7e7e2-9fef-434b-9793-7f7d06d3f38c","leftValue":"={{ $json.ownedByMe }}","rightValue":"","operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},"type":"n8n-nodes-base.filter","typeVersion":2.2,"position":[-656,2208],"id":"175ce55e-27db-4675-b289-0995dffd1a3c","name":"FILTRAR ARQUIVOS COMPARTILHADOS","disabled":true},{"parameters":{"assignments":{"assignments":[{"id":"78053564-cef8-4093-914e-2a037d918c05","name":"ID","value":"={{ $json.id }}","type":"string"},{"id":"b85242f0-8095-4a11-88ea-4d677125d6c3","name":"name","value":"={{ $json.name }}","type":"string"},{"id":"6bcf176f-ecb6-4eea-b99a-74d66dd6ff2b","name":"createdTime","value":"={{ $json.createdTime }}","type":"string"},{"id":"69879d98-b5f6-4f85-bf62-52ee44a3a6ab","name":"modifiedByMe","value":"={{ $json.modifiedByMe }}","type":"boolean"},{"id":"2ada4a96-8b9d-4eea-ad96-5aed13a6b995","name":"fileExtension","value":"={{ $json.fileExtension }}","type":"string"},{"id":"d44e894e-4257-4784-a52c-318a459865eb","name":"=modifiedByMeTime","value":"={{ $json.modifiedByMe }}","type":"boolean"},{"id":"dae67acf-5226-43e2-9bc2-ef2cb4c51c48","name":"properties.Renomeado","value":"={{ $json.renomeado }}","type":"boolean"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[-1296,1872],"id":"a275f448-1569-4798-9333-a97e8ca9e3df","name":"PEGA INFORMAÇÕES NECESSARIAS"},{"parameters":{"resource":"fileFolder","searchMethod":"query","queryString":"=name contains '1.MOVIMENTO' and mimeType = 'application/vnd.google-apps.folder'\n","returnAll":true,"filter":{},"options":{"fields":["*"]}},"type":"n8n-nodes-base.googleDrive","typeVersion":3,"position":[-2320,1984],"id":"551c4431-8e7b-40e2-b68e-e6d0622a78c0","name":"PROCURAR NOME \"MOVIMENTO\"","retryOnFail":true},{"parameters":{"resource":"fileFolder","returnAll":true,"filter":{"folderId":{"__rl":true,"value":"={{ $json.id }}","mode":"id"}},"options":{}},"type":"n8n-nodes-base.googleDrive","typeVersion":3,"position":[-2128,1984],"id":"23dca5b0-b3ac-44a0-895d-e228dcb7d7cf","name":"VARREDURA NAS PASTAS DE MOVIMENTO","retryOnFail":true},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"444c7313-b2ac-43b9-8754-01477448837c","leftValue":"={{ $json.name }}","rightValue":"^(0?[1-9]|1[0-2])[.-]\\d{4}$","operator":{"type":"string","operation":"regex"}}],"combinator":"and"},"options":{}},"type":"n8n-nodes-base.if","typeVersion":2.2,"position":[-1952,1984],"id":"376a1336-caa8-405e-8737-4a91714b8139","name":"If"},{"parameters":{"resource":"fileFolder","returnAll":true,"filter":{"folderId":{"__rl":true,"mode":"id","value":"={{ $json.id }}"}},"options":{}},"type":"n8n-nodes-base.googleDrive","typeVersion":3,"position":[-1840,2128],"id":"123edc5b-67b9-4587-a7f9-4a47979285f7","name":"Search files and folders","retryOnFail":true},{"parameters":{"batchSize":50,"options":{}},"type":"n8n-nodes-base.splitInBatches","typeVersion":3,"position":[-1408,2560],"id":"bbdb0ea3-c70a-41dc-a05a-c52d2e2f6165","name":"Loop Over Items1"},{"parameters":{"amount":1},"type":"n8n-nodes-base.wait","typeVersion":1.1,"position":[-896,2576],"id":"e8dd32c8-159a-4835-9cdf-868fbb501f19","name":"Wait2","webhookId":"8102617c-17c9-4079-999d-1917aeb76900"},{"parameters":{"jsCode":"// Cria um array para acumular todos os arquivos encontrados\nconst allFiles = [];\n\nfor (const item of $input.all()) {\n  const files = item.json.files;\n\n  // se o campo \"files\" não existe ou é vazio, pula\n  if (!Array.isArray(files) || files.length === 0) continue;\n\n  // adiciona os arquivos encontrados no acumulador\n  for (const f of files) {\n    allFiles.push(f);\n  }\n}\n\n// Se não houver nada, retorna um item vazio só pra manter consistência\nif (allFiles.length === 0) {\n  return [{ json: { info: 'Nenhum arquivo encontrado neste batch.' } }];\n}\n\n// Mapeia o formato final desejado\nreturn allFiles.map(file => ({\n  json: {\n    id: file.id,\n    name: file.name,\n    createdTime: file.createdTime,\n    fileExtension: file.fileExtension || file.name.split('.').pop(),\n    modifiedByMe: file.modifiedByMe || false,\n    renomeado: file.properties?.Renomeado || file.appProperties?.Renomeado || false\n  }\n}));\n"},"type":"n8n-nodes-base.code","typeVersion":2,"position":[-1056,2576],"id":"48760899-093f-4934-85b9-8fa5195ada5d","name":"Code in JavaScript"},{"parameters":{},"type":"n8n-nodes-base.merge","typeVersion":3.2,"position":[-1728,1984],"id":"5cda1cdc-7de2-450f-8270-dbc9996a1c25","name":"Merge"},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":2},"conditions":[{"id":"8af132c0-3ab3-429e-91a5-9fc6e657d217","leftValue":"={{ $json.properties.Renomeado }}","rightValue":"=true","operator":{"type":"boolean","operation":"false","singleValue":true}}],"combinator":"and"},"options":{}},"type":"n8n-nodes-base.filter","typeVersion":2.2,"position":[-672,1872],"id":"e6d4f4b7-2043-4832-b2d6-30564e08ec8f","name":"FILTRAR ARQUIVOS NÃO RENOMEADOS"},{"parameters":{"rule":{"interval":[{"field":"hours","hoursInterval":2}]}},"type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[-2512,1984],"id":"996735ad-1917-4561-8bd6-d7fbc9895524","name":"Schedule Trigger"},{"parameters":{"workflowId":{"__rl":true,"value":"fknoxGG9U5fLOwI4","mode":"list","cachedResultUrl":"[REDACTED]","cachedResultName":"File Add + Time Filter"},"workflowInputs":{"mappingMode":"defineBelow","value":{"folder_ids":"={{ $items().map(i => i.json.id) }}"},"matchingColumns":["folder_ids"],"schema":[{"id":"folder_ids","displayName":"folder_ids","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"removed":false}],"attemptToConvertTypes":false,"convertFieldsToString":true},"options":{"waitForSubWorkflow":true}},"type":"n8n-nodes-base.executeWorkflow","typeVersion":1.3,"position":[-1216,2576],"id":"9631ed1b-6792-4ba6-a3bf-c53a51ae0bb3","name":"varredura_arquivos"},{"parameters":{"workflowId":{"__rl":true,"value":"vN8RqT0WCvxgwu6R","mode":"list","cachedResultUrl":"[REDACTED]","cachedResultName":"NOTIFICACAO RENOMEADOS"},"workflowInputs":{"mappingMode":"defineBelow","value":{"id":"={{ $json.id }}"},"matchingColumns":[],"schema":[{"id":"id","displayName":"id","required":false,"defaultMatch":false,"display":true,"canBeUsedToMatch":true,"type":"string","removed":false}],"attemptToConvertTypes":false,"convertFieldsToString":true},"options":{}},"type":"n8n-nodes-base.executeWorkflow","typeVersion":1.3,"position":[1824,2240],"id":"31b9d806-aec6-4d5d-a090-f9d34717a888","name":"Call 'NOTIFICACAO RENOMEADOS'","onError":"[REDACTED]"},{"parameters":{"operation":"update","fileId":{"__rl":true,"value":"={{ $('BAIXA IMAGENS').item.json.ID }}","mode":"id"},"newUpdatedFileName":"={{ $json.message.content['Data de pagamento'] }} - {{ $json.message.content.Beneficiario.toUpperCase() }} - {{ $json.message.content['Valor total'] }}{{ $json.message.content['Tipo de arquivo'] != [empty] || $json.message.content['Tipo de arquivo'] != \"DADO_NAO_ENCONTRADO\" ? $json.message.content['Tipo de arquivo'] : $json.message.content.TipoDocumento  }}.pdf","options":{"propertiesUi":{"propertyValues":[{"key":"[REDACTED]","value":"={{ true }}"}]}}},"type":"n8n-nodes-base.googleDrive","typeVersion":3,"position":[1568,2656],"id":"3100bf74-499d-4b26-a052-19e1b49f9f71","name":"RENOMEAR ARQUIVO"},{"parameters":{"options":{}},"type":"n8n-nodes-tesseractjs.tesseractNode","typeVersion":1,"position":[1040,2640],"id":"ccec1ddf-46be-4e8a-b5f1-19a3ec9dd747","name":"Tesseract"},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4.1-mini","mode":"list","cachedResultName":"GPT-4.1-MINI"},"messages":{"values":[{"content":"[REDACTED]","role":"system"}]},"jsonOutput":true,"options":{"temperature":0.1}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":1.8,"position":[1440,2400],"id":"38c71b16-20f5-4f19-b99d-41bb50742f78","name":"OpenAI2"},{"parameters":{"batchSize":5,"options":{}},"type":"n8n-nodes-base.splitInBatches","typeVersion":3,"position":[1264,2400],"id":"7eccbb24-4f29-4a3c-93da-6e3b71aead1b","name":"Loop Over Items3"},{"parameters":{"amount":1},"type":"n8n-nodes-base.wait","typeVersion":1.1,"position":[1312,2640],"id":"d2c52809-8ae3-42a6-86c4-0c25e8d739ad","name":"ESPERA 1 SEC2","webhookId":"98aa0b75-6c3b-46bf-8e9e-09b0f7bc809c"},{"parameters":{"method":"POST","url":"http://147.93.66.91:5000/upload-all-base64","sendBody":true,"contentType":"multipart-form-data","bodyParameters":{"parameters":[{"parameterType":"formBinaryData","name":"file","inputDataFieldName":"data"}]},"options":{}},"type":"n8n-nodes-base.httpRequest","typeVersion":4.3,"position":[1152,1888],"id":"d82711b2-56eb-49b8-9d73-ad625e3d00f7","name":"HTTP Request"},{"parameters":{"resource":"fileFolder","returnAll":true,"filter":{"folderId":{"__rl":true,"value":"={{ $json.id }}","mode":"id"}},"options":{"fields":["*"]}},"type":"n8n-nodes-base.googleDrive","typeVersion":3,"position":[-1520,1984],"id":"683ce92a-e12c-4231-83a8-e3913cf0a74e","name":"Search files and folders1"},{"parameters":{"url":"=https://www.googleapis.com/drive/v3/files/{{$json.ID}}?alt=media&supportsAllDrives=true","authentication":"[REDACTED]","options":{"response":{"response":{"responseFormat":"file"}}}},"type":"n8n-nodes-base.httpRequest","typeVersion":4.2,"position":[992,1888],"id":"ead573bd-c911-489e-a84d-1ce0aa235a17","name":"BAIXA ARQUIVOS1","retryOnFail":false},{"parameters":{"operation":"toBinary","sourceProperty":"images[0].base64_data","options":{}},"type":"n8n-nodes-base.convertToFile","typeVersion":1.1,"position":[1344,1888],"id":"f32aa133-254e-406d-8fc4-094d982a1cf8","name":"Convert to File"}],"connections":{"FILTRO TIPO DE ARQUIVO":{"main":[[{"node":"FILTRAR ARQUIVOS NÃO RENOMEADOS","type":"main","index":0}]]},"EXTRAÇÃO DO PDF":{"main":[[{"node":"JUNTA TODOS OS DADOS","type":"main","index":0}],[{"node":"É UM PDF ?","type":"main","index":0}]]},"SE O TEXTO FOR VAZIO":{"main":[[{"node":"BAIXA ARQUIVOS1","type":"main","index":0}],[]]},"JUNTA TODOS OS DADOS":{"main":[[{"node":"SE O TEXTO FOR VAZIO","type":"main","index":0}]]},"Filtrar por data":{"main":[[{"node":"FILTRO TIPO DE ARQUIVO","type":"main","index":0}]]},"BAIXA ARQUIVOS":{"main":[[{"node":"Loop Over Items","type":"main","index":0}]]},"Loop Over Items":{"main":[[{"node":"EXTRAÇÃO DO PDF","type":"main","index":0}],[{"node":"Wait","type":"main","index":0}]]},"É UM PDF ?":{"main":[[],[]]},"Wait":{"main":[[{"node":"BAIXA ARQUIVOS","type":"main","index":0}]]},"FILTRAR ARQUIVOS COMPARTILHADOS":{"main":[[]]},"PEGA INFORMAÇÕES NECESSARIAS":{"main":[[{"node":"Filtrar por data","type":"main","index":0}]]},"RENOMEIA PDF VAZIO":{"main":[[{"node":"Call 'NOTIFICACAO RENOMEADOS'","type":"main","index":0}]]},"RENOMEIA PDF":{"main":[[{"node":"Call 'NOTIFICACAO RENOMEADOS'","type":"main","index":0}]]},"RENOMEIA IMAGEM":{"main":[[{"node":"Call 'NOTIFICACAO RENOMEADOS'","type":"main","index":0}]]},"RENOMEIA PDF SCANNEAVEL":{"main":[[{"node":"Call 'NOTIFICACAO RENOMEADOS'","type":"main","index":0}]]},"PROCURAR NOME \"MOVIMENTO\"":{"main":[[{"node":"VARREDURA NAS PASTAS DE MOVIMENTO","type":"main","index":0}]]},"VARREDURA NAS PASTAS DE MOVIMENTO":{"main":[[{"node":"If","type":"main","index":0}]]},"If":{"main":[[{"node":"Merge","type":"main","index":0}],[{"node":"Search files and folders","type":"main","index":0}]]},"Search files and folders":{"main":[[{"node":"Merge","type":"main","index":1}]]},"Loop Over Items1":{"main":[[],[{"node":"varredura_arquivos","type":"main","index":0}]]},"Wait2":{"main":[[{"node":"Loop Over Items1","type":"main","index":0}]]},"Code in JavaScript":{"main":[[{"node":"Wait2","type":"main","index":0}]]},"Merge":{"main":[[{"node":"Search files and folders1","type":"main","index":0}]]},"FILTRAR ARQUIVOS NÃO RENOMEADOS":{"main":[[{"node":"Loop Over Items","type":"main","index":0}]]},"Schedule Trigger":{"main":[[{"node":"PROCURAR NOME \"MOVIMENTO\"","type":"main","index":0}]]},"varredura_arquivos":{"main":[[{"node":"Code in JavaScript","type":"main","index":0}]]},"Tesseract":{"main":[[{"node":"Loop Over Items3","type":"main","index":0}]]},"OpenAI2":{"main":[[{"node":"ESPERA 1 SEC2","type":"main","index":0}]]},"Loop Over Items3":{"main":[[{"node":"RENOMEAR ARQUIVO","type":"main","index":0}],[{"node":"OpenAI2","type":"main","index":0}]]},"ESPERA 1 SEC2":{"main":[[{"node":"Loop Over Items3","type":"main","index":0}]]},"Search files and folders1":{"main":[[{"node":"PEGA INFORMAÇÕES NECESSARIAS","type":"main","index":0}]]},"BAIXA ARQUIVOS1":{"main":[[{"node":"HTTP Request","type":"main","index":0}]]},"HTTP Request":{"main":[[{"node":"Convert to File","type":"main","index":0}]]},"Convert to File":{"main":[[{"node":"Tesseract","type":"main","index":0}]]}},"versionCounter":94}
+{
+  "createdAt": "2025-11-12T13:20:53.379Z",
+  "id": "R0oa5xofWg2aWomx",
+  "name": "RENOMEIO GOOGLE DRIVE MOVIMENTO CONTABIL V 2.0 OG",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a1a462b5-53ac-4af0-9216-c85b3827b8d5",
+              "leftValue": "={{ $json.name.includes('.pdf') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "48208eb1-bc8f-4810-a7d9-83179814d06b",
+              "leftValue": "={{ $json.name.includes('.jpg') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "469a8599-cc65-4e7f-adc9-b7272f2cf7ee",
+              "leftValue": "={{ $json.name.includes('.PDF') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "2ede9023-2e61-4e49-8273-46cc84079e04",
+              "leftValue": "={{ $json.name.includes('.jpeg') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "1cbe92b2-d97e-4c0a-88f6-64edccabea87",
+              "leftValue": "={{ $json.name.includes('.png') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -848,
+        1872
+      ],
+      "id": "472058aa-153a-4506-8fa5-5df3d2e939f8",
+      "name": "FILTRO TIPO DE ARQUIVO"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        176,
+        1920
+      ],
+      "id": "7861b88b-4d19-4fce-b9ae-7c70758fcb8b",
+      "name": "EXTRAÇÃO DO PDF",
+      "retryOnFail": false,
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "01e0a39b-0dce-4e56-9d74-72d6011fd69d",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "83546bc8-1221-40a4-a9ce-2bf7eb823dff",
+              "leftValue": "={{ $json.text }}",
+              "rightValue": "=^\\s*$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "1342be4f-c657-4ee7-8181-d5dcd4360379",
+              "leftValue": "={{ (($json.text ?? '')).length < 30 }}",
+              "rightValue": "={{ $json.text.length < 30 ? \"\" : $json.text }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        1904
+      ],
+      "id": "57a7fbfe-819f-4b6b-a376-9a3eeef33f25",
+      "name": "SE O TEXTO FOR VAZIO"
+    },
+    {
+      "parameters": {
+        "content": "## Agente Responsavel por renomear Imagens\n\n\n",
+        "height": 476,
+        "width": 1080
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        688,
+        2384
+      ],
+      "id": "0e375846-fb1f-4b43-b553-0474665ef54b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Varredura de arquivos do drive e filtragem\n",
+        "height": 556,
+        "width": 2104,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2560,
+        1824
+      ],
+      "id": "7cc659c8-cd83-49e7-9c1a-8ac5081c2523",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a2fe75b-0ab7-4a66-b6c6-ad4a8da7fd2f",
+              "name": "=ID",
+              "value": "={{ $('BAIXA ARQUIVOS').item.json.ID }}",
+              "type": "string"
+            },
+            {
+              "id": "cc351c79-e5a6-4604-a6de-a333a134f574",
+              "name": "name",
+              "value": "={{ $('BAIXA ARQUIVOS').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "8c96cd2d-5c5a-4a47-8858-f39cd5b3bdda",
+              "name": "text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        448,
+        1904
+      ],
+      "id": "4fc48f5f-9809-4829-a715-435b57b48000",
+      "name": "JUNTA TODOS OS DADOS"
+    },
+    {
+      "parameters": {
+        "content": "## Baixa os arquivos, extrai informações e chama os subfluxos para cada caso\n\n\n\n",
+        "height": 556,
+        "width": 1112,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        1824
+      ],
+      "id": "60373be7-4389-4d2d-a69a-b751c3a7b905",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Agente Responsável por renomear PDFS com texto Extraivel\n",
+        "height": 540,
+        "width": 1080
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        688,
+        1824
+      ],
+      "id": "e9f44e71-2768-4144-b173-275214a4b8d3",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "🚀 **Ferramentas utilizadas no fluxo**\n\n🟦 **Google Drive**  \nNó: Google Drive  \nFunção: Upload, download e gerenciamento de arquivos\n\n🤖 **OpenAI**  \nNó: HTTP Request + Funções  \nFunção: Processamento, análise e geração de texto com IA\n",
+        "height": 280,
+        "width": 540,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        1504
+      ],
+      "id": "c779ebf2-5e41-4e25-9db5-bfa3ba4c468d",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2beea2a1-ff79-4412-9d9a-f552009ea040",
+              "leftValue": "={{ $json.createdTime }}",
+              "rightValue": "2025-11-12T08:00:00",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -1008,
+        1872
+      ],
+      "id": "2d51d7ca-dbee-436b-933c-d6d39599eda3",
+      "name": "Filtrar por data"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/drive/v3/files/{{$json.ID}}?alt=media&supportsAllDrives=true",
+        "authentication": "[REDACTED]",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        448,
+        2016
+      ],
+      "id": "bd646e48-d5a9-4475-9510-916c331bcdbc",
+      "name": "BAIXA ARQUIVOS",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "batchSize": 6,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -384,
+        1936
+      ],
+      "id": "27a6222a-1bda-4587-b0ee-4338ac968fd3",
+      "name": "Loop Over Items",
+      "retryOnFail": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "10bcaaa0-e92e-4ee4-8920-357d15b51ba0",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": ".pdf",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "89f11755-c4c5-4c22-a14c-45fc89260bc6",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": ".PDF",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        2080
+      ],
+      "id": "91e82972-ea6f-47f3-b487-2452fed03b79",
+      "name": "É UM PDF ?"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "uTiS3qSlbvXUlCnx",
+          "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
+          "cachedResultName": "RENOMEIO PDF INCORRETO"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "name": "={{ $json.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1824,
+        1936
+      ],
+      "id": "f7583a0a-7427-4e8f-aa42-732d4ebacaad",
+      "name": "RENOMEIA PDF VAZIO"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fN5uSWvKRujKur6R",
+          "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
+          "cachedResultName": "RENOMEIO PDFS INCORRETOS(ERRO)"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "name": "={{ $json.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2368,
+        2272
+      ],
+      "id": "3e42f237-79ab-4057-8e1c-a225193c0b3d",
+      "name": "RENOMEIA PDF SCANNEAVEL"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "YDH3keRYE4xE3V2m",
+          "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
+          "cachedResultName": "RENOMEIA IMAGENS"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "name": "={{ $json.name}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2368,
+        2496
+      ],
+      "id": "08726ada-0de8-4b4f-9a04-dfe46d3dd2b3",
+      "name": "RENOMEIA IMAGEM"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Wc7jGiKMw11GOwwj",
+          "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
+          "cachedResultName": "RENOMEIA PDFS"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "name": "={{ $json.name }}",
+            "text": "={{ $json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1824,
+        2144
+      ],
+      "id": "7602c2c9-7a15-415e-bdc2-5ead7b82dbda",
+      "name": "RENOMEIA PDF"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -208,
+        2016
+      ],
+      "id": "f071efce-2b22-4a74-9a64-03f4cead99a2",
+      "name": "Wait",
+      "webhookId": "17ffbf93-dc4a-43a5-b1c1-17879e1fe976"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e0d7e7e2-9fef-434b-9793-7f7d06d3f38c",
+              "leftValue": "={{ $json.ownedByMe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -656,
+        2208
+      ],
+      "id": "175ce55e-27db-4675-b289-0995dffd1a3c",
+      "name": "FILTRAR ARQUIVOS COMPARTILHADOS",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "78053564-cef8-4093-914e-2a037d918c05",
+              "name": "ID",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85242f0-8095-4a11-88ea-4d677125d6c3",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "6bcf176f-ecb6-4eea-b99a-74d66dd6ff2b",
+              "name": "createdTime",
+              "value": "={{ $json.createdTime }}",
+              "type": "string"
+            },
+            {
+              "id": "69879d98-b5f6-4f85-bf62-52ee44a3a6ab",
+              "name": "modifiedByMe",
+              "value": "={{ $json.modifiedByMe }}",
+              "type": "boolean"
+            },
+            {
+              "id": "2ada4a96-8b9d-4eea-ad96-5aed13a6b995",
+              "name": "fileExtension",
+              "value": "={{ $json.fileExtension }}",
+              "type": "string"
+            },
+            {
+              "id": "d44e894e-4257-4784-a52c-318a459865eb",
+              "name": "=modifiedByMeTime",
+              "value": "={{ $json.modifiedByMe }}",
+              "type": "boolean"
+            },
+            {
+              "id": "dae67acf-5226-43e2-9bc2-ef2cb4c51c48",
+              "name": "properties.Renomeado",
+              "value": "={{ $json.renomeado }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1296,
+        1872
+      ],
+      "id": "a275f448-1569-4798-9333-a97e8ca9e3df",
+      "name": "PEGA INFORMAÇÕES NECESSARIAS"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "searchMethod": "query",
+        "queryString": "=name contains '1.MOVIMENTO' and mimeType = 'application/vnd.google-apps.folder'\n",
+        "returnAll": true,
+        "filter": {},
+        "options": {
+          "fields": [
+            "*"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -2320,
+        1984
+      ],
+      "id": "551c4431-8e7b-40e2-b68e-e6d0622a78c0",
+      "name": "PROCURAR NOME \"MOVIMENTO\"",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -2128,
+        1984
+      ],
+      "id": "23dca5b0-b3ac-44a0-895d-e228dcb7d7cf",
+      "name": "VARREDURA NAS PASTAS DE MOVIMENTO",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "444c7313-b2ac-43b9-8754-01477448837c",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "^(0?[1-9]|1[0-2])[.-]\\d{4}$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1952,
+        1984
+      ],
+      "id": "376a1336-caa8-405e-8737-4a91714b8139",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "={{ $json.id }}"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1840,
+        2128
+      ],
+      "id": "123edc5b-67b9-4587-a7f9-4a47979285f7",
+      "name": "Search files and folders",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "batchSize": 50,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1408,
+        2560
+      ],
+      "id": "bbdb0ea3-c70a-41dc-a05a-c52d2e2f6165",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -896,
+        2576
+      ],
+      "id": "e8dd32c8-159a-4835-9cdf-868fbb501f19",
+      "name": "Wait2",
+      "webhookId": "8102617c-17c9-4079-999d-1917aeb76900"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Cria um array para acumular todos os arquivos encontrados\nconst allFiles = [];\n\nfor (const item of $input.all()) {\n  const files = item.json.files;\n\n  // se o campo \"files\" não existe ou é vazio, pula\n  if (!Array.isArray(files) || files.length === 0) continue;\n\n  // adiciona os arquivos encontrados no acumulador\n  for (const f of files) {\n    allFiles.push(f);\n  }\n}\n\n// Se não houver nada, retorna um item vazio só pra manter consistência\nif (allFiles.length === 0) {\n  return [{ json: { info: 'Nenhum arquivo encontrado neste batch.' } }];\n}\n\n// Mapeia o formato final desejado\nreturn allFiles.map(file => ({\n  json: {\n    id: file.id,\n    name: file.name,\n    createdTime: file.createdTime,\n    fileExtension: file.fileExtension || file.name.split('.').pop(),\n    modifiedByMe: file.modifiedByMe || false,\n    renomeado: file.properties?.Renomeado || file.appProperties?.Renomeado || false\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1056,
+        2576
+      ],
+      "id": "48760899-093f-4934-85b9-8fa5195ada5d",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1728,
+        1984
+      ],
+      "id": "5cda1cdc-7de2-450f-8270-dbc9996a1c25",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8af132c0-3ab3-429e-91a5-9fc6e657d217",
+              "leftValue": "={{ $json.properties.Renomeado }}",
+              "rightValue": "=true",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -672,
+        1872
+      ],
+      "id": "e6d4f4b7-2043-4832-b2d6-30564e08ec8f",
+      "name": "FILTRAR ARQUIVOS NÃO RENOMEADOS"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -2528,
+        1984
+      ],
+      "id": "996735ad-1917-4561-8bd6-d7fbc9895524",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "fknoxGG9U5fLOwI4",
+          "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
+          "cachedResultName": "File Add + Time Filter"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "folder_ids": "={{ $items().map(i => i.json.id) }}"
+          },
+          "matchingColumns": [
+            "folder_ids"
+          ],
+          "schema": [
+            {
+              "id": "folder_ids",
+              "displayName": "folder_ids",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1216,
+        2576
+      ],
+      "id": "9631ed1b-6792-4ba6-a3bf-c53a51ae0bb3",
+      "name": "varredura_arquivos"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "vN8RqT0WCvxgwu6R",
+          "mode": "list",
+          "cachedResultUrl": "[REDACTED]",
+          "cachedResultName": "NOTIFICACAO RENOMEADOS"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1824,
+        2240
+      ],
+      "id": "31b9d806-aec6-4d5d-a090-f9d34717a888",
+      "name": "Call 'NOTIFICACAO RENOMEADOS'",
+      "onError": "[REDACTED]"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('BAIXA ARQUIVOS1').item.json.ID }}",
+          "mode": "id"
+        },
+        "newUpdatedFileName": "={{ $json.message.content['Data de pagamento'] }} - {{ $json.message.content.Beneficiario.toUpperCase() }} - {{ $json.message.content['Valor total'] }}{{ $json.message.content['Tipo de arquivo'] != [empty] || $json.message.content['Tipo de arquivo'] != \"DADO_NAO_ENCONTRADO\" ? $json.message.content['Tipo de arquivo'] : $json.message.content.TipoDocumento  }}.pdf",
+        "options": {
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "[REDACTED]",
+                "value": "={{ true }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1568,
+        2656
+      ],
+      "id": "3100bf74-499d-4b26-a052-19e1b49f9f71",
+      "name": "RENOMEAR ARQUIVO"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-tesseractjs.tesseractNode",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        2608
+      ],
+      "id": "ccec1ddf-46be-4e8a-b5f1-19a3ec9dd747",
+      "name": "Tesseract"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "[REDACTED]",
+              "role": "system"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1440,
+        2400
+      ],
+      "id": "38c71b16-20f5-4f19-b99d-41bb50742f78",
+      "name": "OpenAI2"
+    },
+    {
+      "parameters": {
+        "batchSize": 5,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1264,
+        2400
+      ],
+      "id": "7eccbb24-4f29-4a3c-93da-6e3b71aead1b",
+      "name": "Loop Over Items3"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        2640
+      ],
+      "id": "d2c52809-8ae3-42a6-86c4-0c25e8d739ad",
+      "name": "ESPERA 1 SEC2",
+      "webhookId": "98aa0b75-6c3b-46bf-8e9e-09b0f7bc809c"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://147.93.66.91:5000/upload-all-base64",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1152,
+        1888
+      ],
+      "id": "d82711b2-56eb-49b8-9d73-ad625e3d00f7",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.id }}",
+            "mode": "id"
+          }
+        },
+        "options": {
+          "fields": [
+            "*"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1520,
+        1984
+      ],
+      "id": "683ce92a-e12c-4231-83a8-e3913cf0a74e",
+      "name": "Search files and folders1"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.googleapis.com/drive/v3/files/{{$json.ID}}?alt=media&supportsAllDrives=true",
+        "authentication": "[REDACTED]",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        992,
+        1888
+      ],
+      "id": "ead573bd-c911-489e-a84d-1ce0aa235a17",
+      "name": "BAIXA ARQUIVOS1",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "images[0].base64_data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1344,
+        1888
+      ],
+      "id": "f32aa133-254e-406d-8fc4-094d982a1cf8",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "[REDACTED]",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        688,
+        2624
+      ],
+      "id": "8787beb5-61ed-4348-9c58-ad438d0472ac",
+      "name": "Analyze image"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "92ecbf07-91f1-4b5a-887d-a526038ad1cd",
+              "name": "['0'].content[0].text",
+              "value": "={{ $json['0'].content[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        2304
+      ],
+      "id": "28ab1ba5-4ce3-4918-b240-78589cc67a45",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        528,
+        2624
+      ],
+      "id": "438ed7a0-3393-468b-9b40-52a165f3e234",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. PEGA O TEXTO BRUTO\n// (Usando o caminho que funcionou por último)\nconst raw = $json.content?.[1]?.content?.[0]?.text;\n\n// 2. VERIFICA SE O TEXTO EXISTE\nif (!raw) {\n  throw new Error(\"Texto não encontrado em $json.content[1].content[0].text\");\n}\n\n// 3. LIMPA O TEXTO (SEÇÃO ATUALIZADA)\n// O LLM está retornando ```json ... ```, precisamos remover isso.\nlet cleaned = raw\n  .replace(\"```json\", \"\") // Remove o prefixo ```json\n  .replace(/\\\\n/g, \"\")   // remove quebras de linha escapadas (\\n)\n  .replace(/\\\\t/g, \"\")   // remove tabulações escapadas (\\t)\n  .replace(/\\\\\"/g, '\"')  // substitui aspas escapadas (\\\") por aspas normais (\")\n  .replace(\"```\", \"\");   // Remove o sufixo ``` (no final)\n\n// 4. FAZ O PARSE (CONVERSÃO) DO JSON\nlet parsed;\ntry {\n  // Tenta transformar a string limpa em um objeto JSON\n  parsed = JSON.parse(cleaned);\n} catch (e) {\n  // Lança um erro mais detalhado, mostrando o texto que falhou\n  throw new Error(\n    \"Falha ao converter texto para JSON: \" + e.message + \n    \". Texto (limpo) que falhou: \" + cleaned\n  );\n}\n\n// 5. RETORNA O DADO PARA O FLUXO\n// (Assumindo que você está no modo \"Run Once for Each Item\")\nreturn { json: parsed };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        2720
+      ],
+      "id": "f7233bf0-51b6-4beb-b970-abe236953d08",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "connections": {
+    "FILTRO TIPO DE ARQUIVO": {
+      "main": [
+        [
+          {
+            "node": "FILTRAR ARQUIVOS NÃO RENOMEADOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EXTRAÇÃO DO PDF": {
+      "main": [
+        [
+          {
+            "node": "JUNTA TODOS OS DADOS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "É UM PDF ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SE O TEXTO FOR VAZIO": {
+      "main": [
+        [
+          {
+            "node": "BAIXA ARQUIVOS1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "JUNTA TODOS OS DADOS": {
+      "main": [
+        [
+          {
+            "node": "SE O TEXTO FOR VAZIO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar por data": {
+      "main": [
+        [
+          {
+            "node": "FILTRO TIPO DE ARQUIVO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BAIXA ARQUIVOS": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "EXTRAÇÃO DO PDF",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "É UM PDF ?": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "BAIXA ARQUIVOS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FILTRAR ARQUIVOS COMPARTILHADOS": {
+      "main": [
+        []
+      ]
+    },
+    "PEGA INFORMAÇÕES NECESSARIAS": {
+      "main": [
+        [
+          {
+            "node": "Filtrar por data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RENOMEIA PDF VAZIO": {
+      "main": [
+        [
+          {
+            "node": "Call 'NOTIFICACAO RENOMEADOS'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RENOMEIA PDF": {
+      "main": [
+        [
+          {
+            "node": "Call 'NOTIFICACAO RENOMEADOS'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RENOMEIA IMAGEM": {
+      "main": [
+        [
+          {
+            "node": "Call 'NOTIFICACAO RENOMEADOS'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RENOMEIA PDF SCANNEAVEL": {
+      "main": [
+        [
+          {
+            "node": "Call 'NOTIFICACAO RENOMEADOS'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PROCURAR NOME \"MOVIMENTO\"": {
+      "main": [
+        [
+          {
+            "node": "VARREDURA NAS PASTAS DE MOVIMENTO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VARREDURA NAS PASTAS DE MOVIMENTO": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "varredura_arquivos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FILTRAR ARQUIVOS NÃO RENOMEADOS": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "varredura_arquivos": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tesseract": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI2": {
+      "main": [
+        [
+          {
+            "node": "ESPERA 1 SEC2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [
+          {
+            "node": "RENOMEAR ARQUIVO",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "OpenAI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ESPERA 1 SEC2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders1": {
+      "main": [
+        [
+          {
+            "node": "PEGA INFORMAÇÕES NECESSARIAS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BAIXA ARQUIVOS1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        []
+      ]
+    },
+    "Analyze image": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Analyze image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "versionCounter": 100
+}
