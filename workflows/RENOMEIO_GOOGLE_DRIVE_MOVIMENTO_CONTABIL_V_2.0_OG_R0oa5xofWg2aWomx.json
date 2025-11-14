@@ -642,8 +642,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        -656,
-        2208
+        -272,
+        2592
       ],
       "id": "175ce55e-27db-4675-b289-0995dffd1a3c",
       "name": "FILTRAR ARQUIVOS COMPARTILHADOS",
@@ -1208,8 +1208,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2,
       "position": [
-        688,
-        2624
+        304,
+        2608
       ],
       "id": "8787beb5-61ed-4348-9c58-ad438d0472ac",
       "name": "Analyze image"
@@ -1231,8 +1231,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -144,
-        2304
+        -272,
+        2496
       ],
       "id": "28ab1ba5-4ce3-4918-b240-78589cc67a45",
       "name": "Edit Fields"
@@ -1242,8 +1242,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        528,
-        2624
+        208,
+        2608
       ],
       "id": "438ed7a0-3393-468b-9b40-52a165f3e234",
       "name": "When clicking ‘Execute workflow’"
@@ -1255,8 +1255,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1120,
-        2720
+        400,
+        2608
       ],
       "id": "f7233bf0-51b6-4beb-b970-abe236953d08",
       "name": "Code in JavaScript1"
@@ -1666,5 +1666,5 @@
       ]
     }
   },
-  "versionCounter": 100
+  "versionCounter": 102
 }
