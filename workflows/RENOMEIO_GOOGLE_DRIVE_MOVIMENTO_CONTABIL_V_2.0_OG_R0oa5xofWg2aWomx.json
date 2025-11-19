@@ -1242,7 +1242,7 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        208,
+        96,
         2608
       ],
       "id": "438ed7a0-3393-468b-9b40-52a165f3e234",
@@ -1255,7 +1255,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        400,
+        496,
         2608
       ],
       "id": "f7233bf0-51b6-4beb-b970-abe236953d08",
@@ -1666,5 +1666,5 @@
       ]
     }
   },
-  "versionCounter": 102
+  "versionCounter": 103
 }
